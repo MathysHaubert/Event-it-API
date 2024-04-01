@@ -2,10 +2,12 @@
 
 namespace App\Controllers\NotFoundController;
 
-class NotFoundController
+use App\Controllers\AbstractController;
+
+class NotFoundController extends AbstractController
 {
     public function notFound()
     {
-        echo "'ezs404 Not Found";
+        return json_encode(array("status" => "404"));
     }
 }
