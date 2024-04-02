@@ -1,39 +1,17 @@
-networks:
-  api-firewall-network:
-    name: api-firewall-network
-
 services:
-  api-firewall:
-    container_name: api-firewall
-    image: wallarm/api-firewall:v0.6.16
-    restart: on-failure
-    volumes:
-      - ./firewall:/api-firewall/resources/   # Adjusted volume mapping
-    environment:
-      APIFW_API_SPECS: /api-firewall/resources/swagger.yaml   # Adjusted environment variable
-      APIFW_URL: http://0.0.0.0:8088/
-      APIFW_SERVER_URL: http://127.0.0.1:9000
-      APIFW_REQUEST_VALIDATION: BLOCK
-      APIFW_RESPONSE_VALIDATION: BLOCK
-    ports:
-      - "8088:8088"
-    stop_grace_period: 1s
-    networks:
-      - api-firewall-network
   php:
     image: php:8.2-apache
-    container_name: php-api
-    restart: on-failure
+    container_name: php-8.2-apache
     ports:
       - "9000:80"
     volumes:
-      - ./event-api:/var/www/html
-    stop_grace_period: 1s
-    networks:
-      - api-firewall-network
+      - ./src:/var/www/html
+    build:
+      context: .
+      dockerfile: Dockerfile
   db:
     image: mysql:8.0
-    container_name: mysql-8.0-api
+    container_name: mysql-8.0
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - "3307:3306"
@@ -44,3 +22,12 @@ services:
       MYSQL_PASSWORD: pass
     volumes:
       - ./mysql:/var/lib/mysql
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+        PMA_HOST: db
+        PMA_USER: root
+        PMA_PASSWORD: root
+    ports:
+      - "8899:80"

@@ -1,0 +1,6 @@
+routes:
+    example:
+        controller: App\Controller\HomeController
+        action: index
+        method: GET
+        path: /example
