@@ -1,0 +1,22 @@
+openapi: 3.0.0
+info:
+  title: Connection API
+  version: 1.0.0
+  description: API for checking connection status
+paths:
+  /connection:
+    get:
+      summary: Check Connection
+      description: Check if the connection is okay
+      responses:
+        '200':
+          description: Connection is okay
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                    description: Indicates whether the connection is okay or not.
+                    example: true

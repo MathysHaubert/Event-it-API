@@ -1,0 +1,5 @@
+event-api.check-connection:
+  path: /connection
+  methods: [GET]
+  controller: App\Controllers\Connection\ConnectionController
+  method: checkConnection
