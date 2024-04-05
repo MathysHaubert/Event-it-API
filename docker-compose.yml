@@ -8,24 +8,25 @@ services:
     image: wallarm/api-firewall:v0.6.16
     restart: on-failure
     volumes:
-      - ./firewall:/api-firewall/resources/   # Adjusted volume mapping
+      - ./firewall/swagger.yaml:/api-firewall/resources/swagger.yaml   # Adjusted volume mapping
     environment:
       APIFW_API_SPECS: /api-firewall/resources/swagger.yaml   # Adjusted environment variable
       APIFW_URL: http://0.0.0.0:8088/
-      APIFW_SERVER_URL: http://127.0.0.1:9000
+      APIFW_SERVER_URL: http://backend:80
       APIFW_REQUEST_VALIDATION: BLOCK
-      APIFW_RESPONSE_VALIDATION: BLOCK
+      APIFW_RESPONSE_VALIDATION: LOG_ONLY
+      APIFW_CUSTOM_BLOCK_STATUS_CODE: 403
     ports:
       - "8088:8088"
     stop_grace_period: 1s
     networks:
       - api-firewall-network
-  php:
+  backend:
     image: php:8.2-apache
     container_name: php-api
     restart: on-failure
     ports:
-      - "9000:80"
+      - 9000:80
     volumes:
       - ./event-api:/var/www/html
     stop_grace_period: 1s

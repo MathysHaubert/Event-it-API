@@ -6,17 +6,15 @@ info:
 paths:
   /connection:
     get:
-      summary: Check Connection
-      description: Check if the connection is okay
       responses:
         '200':
-          description: Connection is okay
+          description: OK
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  status:
+                  connection:
                     type: boolean
                     description: Indicates whether the connection is okay or not.
                     example: true

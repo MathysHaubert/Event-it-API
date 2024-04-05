@@ -11,7 +11,7 @@ class ConnectionController extends AbstractController
     public function checkConnection()
     {
         header("Content-Type: application/json");
-        echo json_encode(['status' => true]);
+        echo json_encode([true]);
         exit;
     }
 }
