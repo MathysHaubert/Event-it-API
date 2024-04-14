@@ -12,4 +12,4 @@ ConsoleRunner::run(
     new SingleManagerProvider($entityManager)
 );
 
-// php bin/doctrine.php orm:schema-tool:create
+// php src/bin/doctrine.php orm:schema-tool:create

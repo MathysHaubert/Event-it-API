@@ -46,5 +46,5 @@ services:
       MYSQL_DATABASE: event-API
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
-    volumes:
-      - ./mysql:/var/lib/mysql
+    networks:
+      - api-firewall-network
