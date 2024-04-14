@@ -1,10 +1,47 @@
-version: '3.8'
+networks:
+  api-firewall-network:
+    name: api-firewall-network
 
 services:
-  php:
-    image: php:8.2-apache
-    container_name: php-8.2-apache
-    ports:
-      - "9000:80"
+  api-firewall:
+    container_name: api-firewall
+    image: wallarm/api-firewall:v0.6.16
+    restart: on-failure
     volumes:
-      - ./src:/var/www/html
+      - ./firewall/swagger.yaml:/api-firewall/resources/swagger.yaml   # Adjusted volume mapping
+    environment:
+      APIFW_API_SPECS: /api-firewall/resources/swagger.yaml   # Adjusted environment variable
+      APIFW_URL: http://0.0.0.0:8088/
+      APIFW_SERVER_URL: http://backend:80
+      APIFW_REQUEST_VALIDATION: BLOCK
+      APIFW_RESPONSE_VALIDATION: LOG_ONLY
+      APIFW_CUSTOM_BLOCK_STATUS_CODE: 403
+    ports:
+      - "8088:8088"
+    stop_grace_period: 1s
+    networks:
+      - api-firewall-network
+  backend:
+    image: php:8.2-apache
+    container_name: php-api
+    restart: on-failure
+    ports:
+      - 9000:80
+    volumes:
+      - ./event-api:/var/www/html
+    stop_grace_period: 1s
+    networks:
+      - api-firewall-network
+  db:
+    image: mysql:8.0
+    container_name: mysql-8.0-api
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: event-API
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - ./mysql:/var/lib/mysql
