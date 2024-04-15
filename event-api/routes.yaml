@@ -3,3 +3,9 @@ event-api.check-connection:
   methods: [GET]
   controller: App\Controllers\Connection\ConnectionController
   method: check
+
+event-api.register.examples-keys:
+  path: /register/examples-keys
+  methods: [GET]
+  controller: App\Controllers\Connection\ConnectionController
+  method: exampleJWT
