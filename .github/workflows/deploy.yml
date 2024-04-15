@@ -28,8 +28,15 @@ jobs:
             username: ${{ secrets.SERVER_USERNAME }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
-                cd /path/to/your/project #todo : change this path to the actual path of the project
-                git pull
-                docker-compose down
-                docker-compose build
-                docker-compose up -d
+              # NOT SURE IF THIS WORKS 
+              cd /path/to/your/project
+              git pull
+              docker-compose down
+              docker-compose build
+              docker-compose up -d
+              sleep 10 # wait for containers to start
+              docker-compose exec -T backend composer install
+              DB_EXISTS=$(docker-compose exec -T db mysql -uroot -p${{ secrets.MYSQL_ROOT_PASSWORD }} -e "SHOW DATABASES LIKE '${{ secrets.MYSQL_DATABASE }}';" | grep "${{ secrets.MYSQL_DATABASE }}")
+              if [ -z "$DB_EXISTS" ]; then
+                docker-compose exec -T backend php src/bin/doctrine.php orm:schema-tool:create
+              fi
