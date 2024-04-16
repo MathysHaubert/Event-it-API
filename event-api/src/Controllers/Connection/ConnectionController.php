@@ -28,7 +28,7 @@ class ConnectionController extends AbstractController
 
     /**
      * @OA\Get(
-     * path="/register/generate-keys",
+     * path="/getExampleToken",
      * @OA\Response(
      * response="200",
      * description="Generate public and private keys for JWT authentication",

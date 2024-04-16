@@ -21,9 +21,9 @@ paths:
               schema:
                 description: 'Connection status'
                 type: boolean
-  /register/generate-keys:
+  /getExampleToken:
     get:
-      operationId: 3f9a1f375842cf50af1b4c6d229d3429
+      operationId: b2b182d9d78c244d14bd3738609a6132
       responses:
         '200':
           description: 'Generate public and private keys for JWT authentication'
