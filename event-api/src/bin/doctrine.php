@@ -11,5 +11,3 @@ require __DIR__ . '/../../bootstrap.php';
 ConsoleRunner::run(
     new SingleManagerProvider($entityManager)
 );
-
-// php src/bin/doctrine.php orm:schema-tool:create
