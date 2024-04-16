@@ -10,7 +10,11 @@
         "doctrine/orm": "^3",
         "doctrine/dbal": "^4",
         "symfony/cache": "^7",
-        "vlucas/phpdotenv": "^5.6"
+        "vlucas/phpdotenv": "^5.6",
+      "ext-openssl": "*",
+        "zircote/swagger-php": "^4.8",
+        "doctrine/annotations": "^2.0",
+        "firebase/php-jwt": "^6.10"
     },
     "autoload": {
         "psr-4": {
@@ -19,6 +23,7 @@
         "psr-0": {"App\\": "src/"}
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "generate-swagger": "./vendor/bin/openapi -f yaml -o ../firewall/swagger.yaml  src/Controllers"
     }
 }

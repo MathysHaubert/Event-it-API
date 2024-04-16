@@ -48,3 +48,17 @@ services:
       MYSQL_PASSWORD: pass
     networks:
       - api-firewall-network
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_USER: user
+      PMA_PASSWORD: pass
+      PMA_ARBITRARY: 1
+    ports:
+      - "8899:80"
+    depends_on:
+      - db
+    networks:
+      - api-firewall-network
