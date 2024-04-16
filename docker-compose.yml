@@ -22,6 +22,9 @@ services:
     networks:
       - api-firewall-network
   backend:
+    build: 
+        context: .
+        dockerfile: Dockerfile
     image: php:8.2-apache
     container_name: php-api
     restart: on-failure
@@ -43,5 +46,5 @@ services:
       MYSQL_DATABASE: event-API
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
-    volumes:
-      - ./mysql:/var/lib/mysql
+    networks:
+      - api-firewall-network

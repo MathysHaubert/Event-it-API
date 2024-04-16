@@ -1,23 +1,23 @@
 <?php
 
-ob_start();
+namespace App;
 
-require_once 'Router.php';
+use Exception;
+
+require_once __DIR__ . '/src/Controllers/NotFound/NotFoundController.php';
+require_once __DIR__ . '/Router.php';
+
+ob_start();
 
 // in dev mode only
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 //
+
 try {
-    // check if app.log already exists
-    // Démarrer la session PHP
-    session_start();
-    // Vérifier si la locale est déjà définie dans la session
-    if (!isset($_SESSION['locale'])) {
-        // Si non, définir la locale par défaut à 'en'
-        $_SESSION['locale'] = 'en';
-    }
+
     $router = new Router();
+
     $router->loadRoutes(__DIR__ . '/routes.yaml');
     $url = $_SERVER['REQUEST_URI'];
     $router->dispatch($url);

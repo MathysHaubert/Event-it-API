@@ -1,4 +1,7 @@
 <?php
+
+namespace App;
+
 require_once  'vendor/autoload.php';
 
 use Symfony\Component\Yaml\Yaml;
@@ -49,7 +52,7 @@ class Router {
                     // si le parametre est de type int on récupère un chiffre
                 }
             }
-            if ($route['path'] === $url) { // c heck if the class exists
+            if ($route['path'] === $url) { // check if the class exists
                 if (!class_exists($route['controller'])) {
                     echo "{$route['controller']} not found";
                     return;
