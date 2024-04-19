@@ -48,5 +48,5 @@ jobs:
 
         - name: Update Postman Collection
           run: |
-            chmod +x ./.github/scripts/postmanUpdate.sh
+            chmod +x -R ./.github/
             ./.github/scripts/postmanUpdate.sh PMAK-66221c18ec460900018fc595-1e8e3950bba1f17e6ee46fd5e971c6d208
