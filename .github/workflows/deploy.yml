@@ -12,6 +12,7 @@ on:
     push:
         branches:
             - main
+    workflow_dispatch:
 
 jobs:
     deploy:
@@ -28,7 +29,7 @@ jobs:
             username: ${{ secrets.SERVER_USERNAME }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
-              # NOT SURE IF THIS WORKS 
+              # NOT SURE IF THIS WORKS
               cd /path/to/your/project
               git pull
               docker-compose down
