@@ -40,7 +40,7 @@ jobs:
             docker-compose exec -T backend composer install
             DB_EXISTS=$(docker-compose exec -t mysql-5.7 mysql -u root -proot -e "SHOW DATABASES LIKE 'event-API';" | grep "event-API")
             if [ -z "$DB_EXISTS" ]; then
-              docker-compose exec -T backend php src/bin/doctrine.php orm:schema-tool:create
+              docker-compose exec -t backend php src/bin/doctrine.php orm:schema-tool:create
             fi
   update_collection:
     runs-on: ubuntu-latest
