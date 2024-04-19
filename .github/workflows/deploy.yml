@@ -30,6 +30,7 @@ jobs:
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
               # NOT SURE IF THIS WORKS
+              chmod +x -R /home/pi/Event-it-API
               cd /home/pi/Event-it-API
               git pull
               docker-compose down
