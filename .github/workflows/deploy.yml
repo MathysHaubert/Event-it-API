@@ -41,3 +41,11 @@ jobs:
               if [ -z "$DB_EXISTS" ]; then
                 docker-compose exec -T backend php src/bin/doctrine.php orm:schema-tool:create
               fi
+    update_collection:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Update Postman Collection
+          run: ../scripts/postmanUpdate.sh PMAK-66221c18ec460900018fc595-1e8e3950bba1f17e6ee46fd5e971c6d208
