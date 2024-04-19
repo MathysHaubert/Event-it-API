@@ -28,7 +28,7 @@ jobs:
             username: ${{ secrets.SERVER_USERNAME }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
-              # NOT SURE IF THIS WORKS 
+              # NOT SURE IF THIS WORKS
               cd /path/to/your/project
               git pull
               docker-compose down
@@ -40,3 +40,11 @@ jobs:
               if [ -z "$DB_EXISTS" ]; then
                 docker-compose exec -T backend php src/bin/doctrine.php orm:schema-tool:create
               fi
+    update_collection:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Update Postman Collection
+          run: ../scripts/postmanUpdate.sh
