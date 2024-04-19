@@ -32,3 +32,31 @@ paths:
               schema:
                 description: 'Connection status'
                 type: string
+  '/{entity}':
+    get:
+      operationId: 5cadbfd2f93b3a312b193dec7264cc75
+      parameters:
+        -
+          name: entity
+          in: path
+          description: 'Entity name'
+          required: true
+          schema:
+            type: string
+            enum:
+              - user
+              - capteur
+              - forum
+              - forum_message
+              - organization
+              - reservation
+              - room
+              - status
+      responses:
+        '200':
+          description: 'Check if the connection is working.'
+          content:
+            application/json:
+              schema:
+                description: 'Connection status'
+                type: string
