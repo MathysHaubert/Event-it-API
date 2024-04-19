@@ -1,5 +1,3 @@
 event-api/vendor/**
-mysql/**
 .idea/**
 .vscode/**
-vendor/*
