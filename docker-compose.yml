@@ -36,8 +36,8 @@ services:
     networks:
       - api-firewall-network
   db:
-    image: mariadb:10.5
-    container_name: mysql-8.0-api
+    image: mysql:5.7
+    container_name: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - "3307:3306"
