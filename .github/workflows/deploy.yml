@@ -2,53 +2,53 @@ name: Deploy to server
 
 # todo : ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 # todo : ssh-copy-id -i /path/to/your/public/key.pub username@server
-# Add the private key (the one without the .pub extension) as a secret in your GitHub repository. 
+# Add the private key (the one without the .pub extension) as a secret in your GitHub repository.
 # You can do this in the repository settings under "Secrets". Let's call this secret SSH_PRIVATE_KEY.
 
-#  Add the SERVER_HOST and SERVER_USERNAME secrets to your GitHub repository. (settings -> secrets -> new repository secret) 
+#  Add the SERVER_HOST and SERVER_USERNAME secrets to your GitHub repository. (settings -> secrets -> new repository secret)
 #  These should be the IP address or hostname of your server, and your username on the server, respectively.
 
 on:
-    push:
-        branches:
-            - main
-    workflow_dispatch:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
-    deploy:
-        runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-        steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        - name: Deploy to server
-          uses: appleboy/ssh-action@master
-          with:
-            host: ${{ secrets.SERVER_HOST }}
-            username: ${{ secrets.SERVER_USERNAME }}
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
-            script: |
-              # NOT SURE IF THIS WORKS
-              chmod +x -R /home/pi/Event-it-API
-              cd /home/pi/Event-it-API
-              git pull
-              docker-compose down
-              docker-compose build
-              docker-compose up -d
-              sleep 10 # wait for containers to start
-              docker-compose exec -T backend composer install
-              DB_EXISTS=$(docker-compose exec -T db mysql -uroot -p${{ secrets.MYSQL_ROOT_PASSWORD }} -e "SHOW DATABASES LIKE '${{ secrets.MYSQL_DATABASE }}';" | grep "${{ secrets.MYSQL_DATABASE }}")
-              if [ -z "$DB_EXISTS" ]; then
-                docker-compose exec -T backend php src/bin/doctrine.php orm:schema-tool:create
-              fi
-    update_collection:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # NOT SURE IF THIS WORKS
+            chmod +x -R /home/pi/Event-it-API
+            cd /home/pi/Event-it-API
+            git pull
+            docker-compose down
+            docker-compose build
+            docker-compose up -d
+            sleep 10 # wait for containers to start
+            docker-compose exec -T backend composer install
+            DB_EXISTS=$(docker-compose exec -T db mysql -u user -ppass -e "SHOW DATABASES LIKE 'event-API';" | grep "event-API")
+            if [ -z "$DB_EXISTS" ]; then
+              docker-compose exec -T backend php src/bin/doctrine.php orm:schema-tool:create
+            fi
+  update_collection:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        - name: Update Postman Collection
-          run: |
-            chmod +x -R ./.github/
-            ./.github/scripts/postmanUpdate.sh PMAK-66221c18ec460900018fc595-1e8e3950bba1f17e6ee46fd5e971c6d208
+      - name: Update Postman Collection
+        run: |
+          chmod +x -R ./.github/
+          ./.github/scripts/postmanUpdate.sh PMAK-66221c18ec460900018fc595-1e8e3950bba1f17e6ee46fd5e971c6d208
