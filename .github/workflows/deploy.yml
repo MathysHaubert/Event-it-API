@@ -47,4 +47,6 @@ jobs:
           uses: actions/checkout@v2
 
         - name: Update Postman Collection
-          run: ./.github/scripts/postmanUpdate.sh PMAK-66221c18ec460900018fc595-1e8e3950bba1f17e6ee46fd5e971c6d208
+          run: |
+            chmod +x ./.github/scripts/postmanUpdate.sh
+            ./.github/scripts/postmanUpdate.sh PMAK-66221c18ec460900018fc595-1e8e3950bba1f17e6ee46fd5e971c6d208
