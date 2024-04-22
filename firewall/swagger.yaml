@@ -34,7 +34,7 @@ paths:
                 type: string
   '/{entity}':
     get:
-      operationId: 5cadbfd2f93b3a312b193dec7264cc75
+      operationId: 3bef539a9a6bfbc257e47b3b9189fa97
       parameters:
         -
           name: entity
@@ -52,6 +52,31 @@ paths:
               - reservation
               - room
               - status
+        -
+          name: params
+          in: query
+          description: 'parameters to find the entity'
+          required: true
+          schema:
+            type: string
+            enum:
+              - lastname
+              - firstname
+              - email
+              - id
+              - client_id
+              - organization_id
+              - location
+              - integratedAt
+              - post_number
+              - name
+              - userId
+              - statusId
+              - forumId
+              - like
+              - message
+              - resolved
+              - primaryMessage
       responses:
         '200':
           description: 'Check if the connection is working.'

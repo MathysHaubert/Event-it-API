@@ -40,6 +40,16 @@ class EntityManagerController extends AbstractController
      *             enum={"user", "capteur", "forum", "forum_message", "organization", "reservation", "room", "status"}
      *         )
      *     ),
+     *     @OA\Parameter(
+     *          name="params",
+     *          in="query",
+     *          required=true,
+     *          description="parameters to find the entity",
+     *          @OA\Schema(
+     *              type="string",
+     *              enum={"lastname","firstname","email","id","client_id","organization_id","location","integratedAt","post_number","name","userId","statusId","forumId","like","message","resolved","primaryMessage"}
+     *          )
+     *      ),
      *     @OA\Response(
      *         response="200",
      *         description="Check if the connection is working.",
@@ -51,10 +61,10 @@ class EntityManagerController extends AbstractController
      * )
      */
 
-    public function check()
+    public function getEntity(array $params)
     {
         header('Content-Type: application/json; charset=utf-8');
-        $response = new JSONResponse(true);
+        $response = new JSONResponse($params);
         $response->send();
     }
 }

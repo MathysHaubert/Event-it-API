@@ -9,3 +9,11 @@ event-api.examples-token:
   methods: [GET]
   controller: App\Controllers\Connection\ConnectionController
   method: exampleJWT
+
+event-api.get-entity:
+  path: /{entity}
+  methods: [GET]
+  controller: App\Controllers\EntityManagerController\EntityManagerController
+  method: getEntity
+  params:
+    entity: [user, capteur, forum, forum_message, organization, reservation, room, status]

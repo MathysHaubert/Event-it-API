@@ -5,7 +5,7 @@ networks:
 services:
   api-firewall:
     container_name: api-firewall
-    image: wallarm/api-firewall:v0.6.16
+    image: wallarm/api-firewall:v0.7.2
     restart: on-failure
     volumes:
       - ./firewall/swagger.yaml:/api-firewall/resources/swagger.yaml   # Adjusted volume mapping
