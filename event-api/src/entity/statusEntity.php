@@ -29,20 +29,19 @@ class Status
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="User", mappedBy="status")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="status")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $users;
+    #[ORM\ManyToOne(targetEntity: "User", inversedBy: "status")]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id")]
+    private $userId;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Organization", mappedBy="status")
-     */
-    private $organizations;
 
     // getters and setters
-    
+
     /**
      * Get the value of id
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -50,7 +49,7 @@ class Status
 
     /**
      * Get the value of name
-     */ 
+     */
     public function getName()
     {
         return $this->name;
@@ -60,7 +59,7 @@ class Status
      * Set the value of name
      *
      * @return  self
-     */ 
+     */
     public function setName($name)
     {
         $this->name = $name;
@@ -70,10 +69,10 @@ class Status
 
     /**
      * Get the value of user
-     */ 
-    public function getUser()
+     */
+    public function getUserId()
     {
-        return $this->user;
+        return $this->userId;
     }
 
     /**
@@ -81,9 +80,9 @@ class Status
      *
      * @return  self
      */ 
-    public function setUser($user)
+    public function setUserId($userId)
     {
-        $this->user = $user;
+        $this->userId = $userId;
 
         return $this;
     }
