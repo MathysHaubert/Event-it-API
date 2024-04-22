@@ -29,14 +29,6 @@ class User
     private $last_connection;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Organization")
-     * @ORM\JoinColumn(name="client_id", referencedColumnName="id")
-     */
-    #[ORM\ManyToOne(targetEntity: "Organization")]
-    #[ORM\JoinColumn(name: "client_id", referencedColumnName: "id")]
-    private $client;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     #[ORM\Column(type: "string", length: 255)]
@@ -52,7 +44,7 @@ class User
      * @ORM\ManyToOne(targetEntity="Status")
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id")
      */
-    #[ORM\ManyToOne(targetEntity: "Status")]
+    #[ORM\ManyToOne(targetEntity: "Organization")]
     #[ORM\JoinColumn(name: "organization_id", referencedColumnName: "id")]
     private $organization;
 
@@ -144,26 +136,6 @@ class User
     public function setLastConnection(\DateTimeInterface $last_connection): self
     {
         $this->last_connection = $last_connection;
-        return $this;
-    }
-
-    /**
-     * Get the value of client
-     * @return Organization|null
-     */
-    public function getClientId(): ?int
-    {
-        return $this->client_id;
-    }
-
-    /**
-     * Set the value of client_id
-     * @param int $client_id
-     * @return self
-     */
-    public function setClientId(int $client_id): self
-    {
-        $this->client_id = $client_id;
         return $this;
     }
 
