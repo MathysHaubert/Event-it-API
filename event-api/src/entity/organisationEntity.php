@@ -3,48 +3,27 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="Organization")
- */
 #[ORM\Entity]
 #[ORM\Table(name: "Organization")]
 class Organization
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[ORM\Column(type: "string", length: 255)]
     private $name;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Status")
-     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
-     */
     #[ORM\ManyToOne(targetEntity: "Status")]
     #[ORM\JoinColumn(name: "status_id", referencedColumnName: "id")]
     private $status;
 
-    /**
-     * @ORM\OneToMany(targetEntity="User", mappedBy="organization")
-     */
     #[ORM\OneToMany(targetEntity: "User", mappedBy: "organization")]
     private $users;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Reservation", mappedBy="organization")
-     */
     #[ORM\OneToMany(targetEntity: "Reservation", mappedBy: "organization")]
     private $reservations;
 
@@ -57,15 +36,6 @@ class Organization
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * Set the value of id
-     * @param int $id
-     */
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     /**
@@ -131,5 +101,24 @@ class Organization
     {
         $this->users->removeElement($user);
         $user->setOrganization(null);
+    }
+
+    /**
+     * Get the value of reservations
+     * @return Reservation[]|Collection
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    /**
+     * Add a reservation to the organization
+     * @param Reservation $reservation
+     */
+    public function addReservation(Reservation $reservation): void
+    {
+        $this->reservations[] = $reservation;
+        $reservation->setOrganization($this);
     }
 }

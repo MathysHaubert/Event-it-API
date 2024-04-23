@@ -3,80 +3,43 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="User")
- */
 #[ORM\Entity]
 #[ORM\Table(name: "User")]
 class User
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private $id;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
     #[ORM\Column(type: "datetime")]
     private $last_connection;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[ORM\Column(type: "string", length: 255)]
     private $password;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[ORM\Column(type: "string", length: 255)]
     private $email;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Status")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id")
-     */
     #[ORM\ManyToOne(targetEntity: "Organization")]
     #[ORM\JoinColumn(name: "organization_id", referencedColumnName: "id")]
     private $organization;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Forum_message", mappedBy="user")
-     */
     #[ORM\OneToMany(targetEntity: "Forum_message", mappedBy: "user")]
     private $forum_messages;
 
-    /**
-     * @ORM\Column(type="DateTime")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     #[ORM\Column(type: "DateTime")]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private $created_at;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
     #[ORM\Column(type: "string", length: 50)]
     private $first_name;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
     #[ORM\Column(type: "string", length: 50)]
     private $last_name;
 
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
     #[ORM\Column(type: "string", length: 50)]
     private $role;
 
@@ -213,21 +176,60 @@ class User
 
     /**
      * Get the value of organization
-     * @return Status|null
+     * @return Organization|null
      */
-    public function getOrganizationId(): ?int
+    public function getOrganization(): ?Organization
     {
-        return $this->organization_id;
+        return $this->organization;
     }
 
     /**
-     * Set the value of organization_id
-     * @param int $organization_id
+     * Set the value of organization
+     * @param Organization|null $organization
      * @return self
      */
-    public function setOrganizationId(int $organization_id): self
+    public function setOrganization(?Organization $organization): self
     {
-        $this->organization_id = $organization_id;
+        $this->organization = $organization;
+        return $this;
+    }
+
+    /**
+     * Get the value of forum_messages
+     * @return Forum_message[]|Collection
+     */
+    public function getForumMessages(): Collection
+    {
+        return $this->forum_messages;
+    }
+
+    /**
+     * Add a forum_message to the user
+     * @param Forum_message $forum_message
+     */
+    public function addForumMessage(Forum_message $forum_message): void
+    {
+        $this->forum_messages[] = $forum_message;
+        $forum_message->setUser($this);
+    }
+
+    /**
+     * Get the value of role
+     * @return string|null
+     */
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    /**
+     * Set the value of role
+     * @param string $role
+     * @return self
+     */
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
         return $this;
     }
 }

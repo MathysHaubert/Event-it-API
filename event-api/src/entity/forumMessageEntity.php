@@ -4,61 +4,32 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="Forum_message")
- */
 #[ORM\Entity]
 #[ORM\Table(name: "Forum_message")]
 class Forum_message
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     */
     #[ORM\ManyToOne(targetEntity: "User")]
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id")]
     private $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Forum")
-     * @ORM\JoinColumn(name="forum_id", referencedColumnName="id")
-     */
     #[ORM\ManyToOne(targetEntity: "Forum")]
     #[ORM\JoinColumn(name: "forum_id", referencedColumnName: "id")]
     private $forum;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
     #[ORM\Column(type: "integer")]
     private $like;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[ORM\Column(type: "string", length: 255)]
     private $message;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
     #[ORM\Column(type: "boolean")]
     private $resolved;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
     #[ORM\Column(type: "boolean")]
     private $primary_message;
 

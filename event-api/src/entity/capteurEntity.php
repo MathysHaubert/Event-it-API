@@ -4,52 +4,27 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="Capteurs")
- */
 #[ORM\Entity]
 #[ORM\Table(name: "Capteurs")]
 class Capteurs
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private $id;
 
-    /**
-     * @ORM\Column(type="date")
-     */
     #[ORM\Column(type: "date")]
     private $date;
 
-    /**
-     * @ORM\Column(type="time")
-     */
     #[ORM\Column(type: "time")]
     private $time;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[ORM\Column(type: "string", length: 255)]
     private $type;
 
-    /**
-     * @ORM\Column(type="float")
-     */
     #[ORM\Column(type: "float")]
     private $value;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Room")
-     * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
-     */
     #[ORM\ManyToOne(targetEntity: "Room")]
     #[ORM\JoinColumn(name: "room_id", referencedColumnName: "id")]
     private $room;
