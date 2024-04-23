@@ -41,12 +41,38 @@ class User
     private $email;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Status")
+     * @ORM\ManyToOne(targetEntity="Organization")
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id")
      */
     #[ORM\ManyToOne(targetEntity: "Organization")]
     #[ORM\JoinColumn(name: "organization_id", referencedColumnName: "id")]
     private $organization;
+
+    /**
+     * @ORM\Column(type="DateTime")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    #[ORM\Column(type: "DateTime")]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    private $created_at;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    #[ORM\Column(type: "string", length: 50)]
+    private $first_name;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    #[ORM\Column(type: "string", length: 50)]
+    private $last_name;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    #[ORM\Column(type: "string", length: 50)]
+    private $role;
 
     // getters and setters
 
@@ -196,6 +222,46 @@ class User
     public function setOrganizationId(int $organization_id): self
     {
         $this->organization_id = $organization_id;
+        return $this;
+    }
+
+    /**
+     * Get the value of organization
+     * @return Organization|null
+     */
+    public function getOrganization(): ?Organization
+    {
+        return $this->organization;
+    }
+
+    /**
+     * Set the value of organization
+     * @param Organization|null $organization
+     * @return self
+     */
+    public function setOrganization(?Organization $organization): self
+    {
+        $this->organization = $organization;
+        return $this;
+    }
+
+    /**
+     * Get the value of role
+     * @return string|null
+     */
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    /**
+     * Set the value of role
+     * @param string $role
+     * @return self
+     */
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
         return $this;
     }
 }
