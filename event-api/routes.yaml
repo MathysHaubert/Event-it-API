@@ -12,8 +12,8 @@ event-api.examples-token:
 
 event-api.get-entity:
   path: /{entity}
-  methods: [GET]
+  methods: [POST]
   controller: App\Controllers\EntityManagerController\EntityManagerController
-  method: getEntity
+  method: entity
   params:
     entity: [user, capteur, forum, forum_message, organization, reservation, room, status]

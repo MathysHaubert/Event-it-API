@@ -13,9 +13,18 @@ use App\Entity\Reservation;
 use App\Entity\Room;
 use App\Entity\Status;
 use OpenApi\Annotations as OA;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMSetup;
 
 class EntityManagerController extends AbstractController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     const entity = [
         'user' => User::class,
         'capteur' => Capteurs::class,
@@ -28,7 +37,7 @@ class EntityManagerController extends AbstractController
     ];
 
     /**
-     * @OA\Get(
+     * @OA\Post(
      *     path="/{entity}",
      *     @OA\Parameter(
      *         name="entity",
@@ -40,16 +49,6 @@ class EntityManagerController extends AbstractController
      *             enum={"user", "capteur", "forum", "forum_message", "organization", "reservation", "room", "status"}
      *         )
      *     ),
-     *     @OA\Parameter(
-     *          name="params",
-     *          in="query",
-     *          required=true,
-     *          description="parameters to find the entity",
-     *          @OA\Schema(
-     *              type="string",
-     *              enum={"lastname","firstname","email","id","client_id","organization_id","location","integratedAt","post_number","name","userId","statusId","forumId","like","message","resolved","primaryMessage"}
-     *          )
-     *      ),
      *     @OA\Response(
      *         response="200",
      *         description="Check if the connection is working.",
@@ -61,10 +60,34 @@ class EntityManagerController extends AbstractController
      * )
      */
 
-    public function getEntity(array $params)
+    public function entity(array $params)
     {
-        header('Content-Type: application/json; charset=utf-8');
-        $response = new JSONResponse($params);
+        $dataResponse = "";
+        if (array_key_exists("get",$params)) {
+            foreach ($params["get"] as $name => $value)
+            if ($value === "example") {
+                $repo = $this->entityManager->getRepository(User::class);
+                $dataResponse = $repo->findBy(["email" => "toto@example.com"]); // TODO: implement findBy to search for a specifi entity
+            }
+
+        }
+        if (array_key_exists("create",$params)) {
+            foreach ($params["create"] as $name => $value) {
+                switch($name) {
+                    case ("user"):
+                        if ($value === "example") {
+                            $user = new User();
+                            $user->setLastConnection(new \DateTime('now'));
+                            $user->setPassword("toto");
+                            $user->setEmail("toto@example.com");
+                            $this->entityManager->persist($user);
+                            $this->entityManager->flush();
+                        }
+                        break;
+                }
+            }
+        }
+        $response = new JSONResponse($dataResponse);
         $response->send();
     }
 }

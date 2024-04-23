@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Entity]
 #[ORM\Table(name: "User")]
-class User
+class User implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -225,5 +226,17 @@ class User
     {
         $this->organization_id = $organization_id;
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'last_connection' => $this->last_connection,
+            'client' => $this->client,
+            'password' => $this->password,
+            'email' => $this->email,
+            'organization' => $this->organization,
+        ];
     }
 }
