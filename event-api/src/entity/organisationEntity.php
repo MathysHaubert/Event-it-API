@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
 
 /**
  * @ORM\Entity
@@ -28,6 +27,14 @@ class Organization
      */
     #[ORM\Column(type: "string", length: 255)]
     private $name;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Status")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
+     */
+    #[ORM\ManyToOne(targetEntity: "Status")]
+    #[ORM\JoinColumn(name: "status_id", referencedColumnName: "id")]
+    private $status;
 
     /**
      * @ORM\OneToMany(targetEntity="User", mappedBy="organization")

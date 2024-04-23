@@ -23,13 +23,13 @@ class Reservation
     private $id;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date")
      */
-    #[ORM\Column(type: "datetime", name: "start_at")]
-    private $startAt;
+    #[ORM\Column(type: "date")]
+    private $date;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="time")
      */
     #[ORM\Column(type: "datetime", name: "end_at")]
     private $endAt;
@@ -120,24 +120,5 @@ class Reservation
     {
         $this->room = $room;
         return $this;
-    }
-
-    /**
-     * Get the value of capteur_archives
-     * @return Capteur_Archive[]|Collection
-     */
-    public function getCapteurArchives(): Collection
-    {
-        return $this->capteur_archives;
-    }
-
-    /**
-     * Add a capteur_archive
-     * @param Capteur_Archive $capteur_archive
-     */
-    public function addCapteurArchive(Capteur_Archive $capteur_archive): void
-    {
-        $this->capteur_archives[] = $capteur_archive;
-        $capteur_archive->setReservation($this);
     }
 }
