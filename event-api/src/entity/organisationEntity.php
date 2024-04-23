@@ -30,16 +30,11 @@ class Organization
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Status")
-     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
-     */
-    #[ORM\ManyToOne(targetEntity: "Status")]
-    #[ORM\JoinColumn(name: "status_id", referencedColumnName: "id")]
-    private $status;
-
-    /**
      * @ORM\OneToMany(targetEntity="User", mappedBy="organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id")
      */
+    #[ORM\OneToMany(targetEntity: "User", mappedBy: "organization")]
+    #[ORM\JoinColumn(name: "organization_id", referencedColumnName: "id")]
     private $users;
 
     // getters and setters

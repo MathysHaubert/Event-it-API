@@ -23,16 +23,10 @@ class Capteurs
     private $id;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
-    #[ORM\Column(type: "date")]
-    private $date;
-
-    /**
-     * @ORM\Column(type="time")
-     */
-    #[ORM\Column(type: "time")]
-    private $time;
+    #[ORM\Column(type: "datetime")]
+    private $taken_at;
 
     /**
      * @ORM\Column(type="string", length=255)

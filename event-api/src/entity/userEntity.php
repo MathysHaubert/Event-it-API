@@ -69,12 +69,10 @@ class User
     private $last_name;
 
     /**
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="string", length=50)
      */
-    #[ORM\Column(type: "integer")]
-    #[ORM\GeneratedValue(strategy: "AUTO")]
-    private $organization_id;
+    #[ORM\Column(type: "string", length: 50)]
+    private $role;
 
     // getters and setters
 
@@ -244,6 +242,26 @@ class User
     public function setOrganization(?Organization $organization): self
     {
         $this->organization = $organization;
+        return $this;
+    }
+
+    /**
+     * Get the value of role
+     * @return string|null
+     */
+    public function getRole(): ?string
+    {
+        return $this->role;
+    }
+
+    /**
+     * Set the value of role
+     * @param string $role
+     * @return self
+     */
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
         return $this;
     }
 }
