@@ -31,16 +31,14 @@ class Reservation
     /**
      * @ORM\Column(type="time")
      */
-    #[ORM\Column(type: "time")]
-    private $time;
+    #[ORM\Column(type: "datetime", name: "end_at")]
+    private $endAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Room")
-     * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
+     * @ORM\OneToMany(targetEntity="Capteur_Archive", mappedBy="reservation")
      */
-    #[ORM\ManyToOne(targetEntity: "Room")]
-    #[ORM\JoinColumn(name: "room_id", referencedColumnName: "id")]
-    private $room;
+    #[ORM\OneToMany(targetEntity: "Capteur_Archive", mappedBy: "reservation")]
+    private $capteur_archives;
 
     // getters and setters
 

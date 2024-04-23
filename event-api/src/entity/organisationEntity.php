@@ -39,7 +39,14 @@ class Organization
     /**
      * @ORM\OneToMany(targetEntity="User", mappedBy="organization")
      */
+    #[ORM\OneToMany(targetEntity: "User", mappedBy: "organization")]
     private $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Reservation", mappedBy="organization")
+     */
+    #[ORM\OneToMany(targetEntity: "Reservation", mappedBy: "organization")]
+    private $reservations;
 
     // getters and setters
 

@@ -48,6 +48,38 @@ class User
     #[ORM\JoinColumn(name: "organization_id", referencedColumnName: "id")]
     private $organization;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Forum_message", mappedBy="user")
+     */
+    #[ORM\OneToMany(targetEntity: "Forum_message", mappedBy: "user")]
+    private $forum_messages;
+
+    /**
+     * @ORM\Column(type="DateTime")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    #[ORM\Column(type: "DateTime")]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    private $created_at;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    #[ORM\Column(type: "string", length: 50)]
+    private $first_name;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    #[ORM\Column(type: "string", length: 50)]
+    private $last_name;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    #[ORM\Column(type: "string", length: 50)]
+    private $role;
+
     // getters and setters
 
     /**
