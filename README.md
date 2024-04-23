@@ -9,6 +9,6 @@ In case the database is not created you can run :
 
 If at one point you want to modify or add an entity you will have to run the following commands in the php-api container :
 
-`php src/bin/console doctrine:schema:update --dump-sql`
+`php src/bin/doctrine.php doctrine:schema:update --dump-sql`
 
-`php src/bin/console doctrine:schema:update --force`
+`php src/bin/doctrine.php doctrine:schema:update --force`
