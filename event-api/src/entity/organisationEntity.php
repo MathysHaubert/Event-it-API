@@ -31,11 +31,15 @@ class Organization
 
     /**
      * @ORM\OneToMany(targetEntity="User", mappedBy="organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id")
      */
     #[ORM\OneToMany(targetEntity: "User", mappedBy: "organization")]
-    #[ORM\JoinColumn(name: "organization_id", referencedColumnName: "id")]
     private $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Reservation", mappedBy="organization")
+     */
+    #[ORM\OneToMany(targetEntity: "Reservation", mappedBy: "organization")]
+    private $reservations;
 
     // getters and setters
 

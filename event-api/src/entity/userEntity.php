@@ -49,6 +49,12 @@ class User
     private $organization;
 
     /**
+     * @ORM\OneToMany(targetEntity="Forum_message", mappedBy="user")
+     */
+    #[ORM\OneToMany(targetEntity: "Forum_message", mappedBy: "user")]
+    private $forum_messages;
+
+    /**
      * @ORM\Column(type="DateTime")
      * @ORM\GeneratedValue(strategy="AUTO")
      */

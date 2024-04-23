@@ -23,12 +23,6 @@ class Capteur_Archive
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    #[ORM\Column(type: "integer", name: "reservation_id")]
-    private $reservationId;
-
-    /**
      * @ORM\Column(type="float")
      */
     #[ORM\Column(type: "float", name: "valeur_moyenne_capteur")]

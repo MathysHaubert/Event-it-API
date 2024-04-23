@@ -46,6 +46,7 @@ class Forum
 
     /**
      * @ORM\OneToMany(targetEntity="Forum_message", mappedBy="forum")
+     * @ORM\JoinColumn(name="forum_id")
      */
     #[ORM\OneToMany(targetEntity: "Forum_message", mappedBy: "forum")]
     private $forum_messages;

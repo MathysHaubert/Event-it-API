@@ -37,11 +37,13 @@ class Room
     /**
      * @ORM\OneToMany(targetEntity="Reservation", mappedBy="room")
      */
+    #[ORM\OneToMany(targetEntity: "Reservation", mappedBy: "room")]
     private $reservations;
 
     /**
      * @ORM\OneToMany(targetEntity="Capteurs", mappedBy="room")
      */
+    #[ORM\OneToMany(targetEntity: "Capteurs", mappedBy: "room")]
     private $capteurs;
 
     // getters and setters

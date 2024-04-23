@@ -35,19 +35,9 @@ class Reservation
     private $endAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Room")
-     * @ORM\JoinColumn(name="room_id", referencedColumnName="id")
-     */
-    #[ORM\ManyToOne(targetEntity: "Room")]
-    #[ORM\JoinColumn(name: "room_id", referencedColumnName: "id")]
-    private $room;
-
-    /**
      * @ORM\OneToMany(targetEntity="Capteur_Archive", mappedBy="reservation")
-     * @ORM\JoinColumn(name="reservation_id", referencedColumnName="id")
      */
     #[ORM\OneToMany(targetEntity: "Capteur_Archive", mappedBy: "reservation")]
-    #[ORM\JoinColumn(name: "reservation_id", referencedColumnName: "id")]
     private $capteur_archives;
 
     // getters and setters
