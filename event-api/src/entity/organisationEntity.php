@@ -17,10 +17,6 @@ class Organization
     #[ORM\Column(type: "string", length: 255)]
     private $name;
 
-    #[ORM\ManyToOne(targetEntity: "Status")]
-    #[ORM\JoinColumn(name: "status_id", referencedColumnName: "id")]
-    private $status;
-
     #[ORM\OneToMany(targetEntity: "User", mappedBy: "organization")]
     private $users;
 
@@ -54,24 +50,6 @@ class Organization
     public function setName(string $name): void
     {
         $this->name = $name;
-    }
-
-    /**
-     * Get the value of status
-     * @return Status|null
-     */
-    public function getStatus(): ?Status
-    {
-        return $this->status;
-    }
-
-    /**
-     * Set the value of status
-     * @param Status|null $status
-     */
-    public function setStatus(?Status $status): void
-    {
-        $this->status = $status;
     }
 
     /**

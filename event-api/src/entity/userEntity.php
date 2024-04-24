@@ -30,7 +30,7 @@ class User
     #[ORM\OneToMany(targetEntity: "Forum_message", mappedBy: "user")]
     private $forum_messages;
 
-    #[ORM\Column(type: "DateTime")]
+    #[ORM\Column(type: "datetime")]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private $created_at;
 
