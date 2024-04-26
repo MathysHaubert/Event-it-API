@@ -4,50 +4,26 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="Forum")
- */
 #[ORM\Entity]
 #[ORM\Table(name: "Forum")]
 class Forum
 {
-    /**
-     * @ORM\Column(type="datetime")
-     */
     #[ORM\Column(type: "datetime")]
     private $last_modified;
 
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="string", length=255)
-     */
     #[ORM\Id]
     #[ORM\Column(type: "string", length: 255)]
     private $id;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
     #[ORM\Column(type: "integer")]
     private $post_number;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
     #[ORM\Column(type: "integer")]
     private $last_post;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
     #[ORM\Column(type: "boolean")]
     private $close;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Forum_message", mappedBy="forum")
-     * @ORM\JoinColumn(name="forum_id")
-     */
     #[ORM\OneToMany(targetEntity: "Forum_message", mappedBy: "forum")]
     private $forum_messages;
 
