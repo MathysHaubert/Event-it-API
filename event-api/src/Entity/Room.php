@@ -3,45 +3,27 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="Room")
- */
 #[ORM\Entity]
 #[ORM\Table(name: "Room")]
 class Room
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     #[ORM\Column(type: "string", length: 255)]
     private $location;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
     #[ORM\Column(type: "datetime")]
     private $integrated_at;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Reservation", mappedBy="room")
-     */
+    #[ORM\OneToMany(targetEntity: "Reservation", mappedBy: "room")]
     private $reservations;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Capteurs", mappedBy="room")
-     */
+    #[ORM\OneToMany(targetEntity: "Capteurs", mappedBy: "room")]
     private $capteurs;
 
     // getters and setters
