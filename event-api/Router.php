@@ -2,18 +2,19 @@
 
 namespace App;
 
-require_once  'vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 use Symfony\Component\Yaml\Yaml;
 
-class Router {
+class Router
+{
     private $routes = [];
 
     public function loadRoutes($file): void
     {
         $routes = Yaml::parseFile($file);
         foreach ($routes as $name => $data) {
-            $this->addRoute($data['path'], $data['controller'], $data['method'], array_key_exists(key:'parameters',array:$data) ? $data['parameters'] : []);
+            $this->addRoute($data['path'], $data['controller'], $data['method'], array_key_exists(key: 'params', array: $data) ? $data['params'] : []);
         }
 
     }
@@ -36,34 +37,34 @@ class Router {
     public function dispatch(string $url): void
     {
         foreach ($this->routes as $route) {
-            // Currently, the route cannot be find. ex: id will be "12" and not "{id}"
             if (!empty($route['params'])) {
-                // get params from the route with {}
-                preg_match_all('/\{([^\}]*)\}/', $route["path"], $matches);
-                /** @var array $options */
-                foreach ($route['params'] as $key => $options) {
-                    $index = array_search($options, $matches[1]);
-                    //replace le number by {id}
-                    if ($options["type"] === "int") {
-                        preg_match('/\d+/', $url, $resultArray);
-                        $data[$key] = array_values($resultArray);
+                foreach ($route['params'] as $param) {
+                    foreach ($param as $content) {
+                        if (preg_match("/".$content."/", $url, $matchesParams)) {
+                            $entity = $matchesParams[0];
+                            preg_match_all("/{[a-zA-Z]+}/", $route['path'], $matchesPath);
+                            $route['path'] = str_replace($matchesPath[0], $entity, $route['path']);
+                        }
                     }
-                    $url = preg_replace('/\{([^\}]*)\}/', $matches[0][$index], $route["path"]);
-                    // si le parametre est de type int on récupère un chiffre
                 }
             }
-            if ($route['path'] === $url) { // check if the class exists
-                if (!class_exists($route['controller'])) {
-                    echo "{$route['controller']} not found";
-                    return;
-                } else {
-                    $controller = new $route['controller'];
-                    $method = $route['method'];
-                    $controller->$method($data ?? []);
-                    return;
+                if ($route['path'] === explode("?",$url)[0]) { // check if the class exists
+                    if (!class_exists($route['controller'])) {
+                        echo "{$route['controller']} not found";
+                        return;
+                    } else {
+                        $controller = new $route['controller'];
+                        $method = $route['method'];
+                        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                            $data = $_GET;
+                        } else {
+                            $data = json_decode(file_get_contents('php://input'), true);
+                        }
+                        $controller->$method($data ?? []);
+                        return;
+                    }
                 }
             }
+            echo "404 Not Found";
         }
-        echo "404 Not Found";
     }
-}

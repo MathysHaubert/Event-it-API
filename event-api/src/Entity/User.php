@@ -232,4 +232,16 @@ class User
         $this->role = $role;
         return $this;
     }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'last_connection' => $this->last_connection,
+            'client' => $this->client,
+            'password' => $this->password,
+            'email' => $this->email,
+            'organization' => $this->organization,
+        ];
+    }
 }

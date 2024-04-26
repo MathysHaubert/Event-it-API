@@ -12,10 +12,21 @@ use App\Entity\Organization;
 use App\Entity\Reservation;
 use App\Entity\Room;
 use App\Entity\Status;
+use Doctrine\DBAL\Exception;
+use Doctrine\ORM\Exception\ORMException;
 use OpenApi\Annotations as OA;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMSetup;
 
 class EntityManagerController extends AbstractController
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     const entity = [
         'user' => User::class,
         'capteur' => Capteurs::class,
@@ -28,7 +39,7 @@ class EntityManagerController extends AbstractController
     ];
 
     /**
-     * @OA\Get(
+     * @OA\Post(
      *     path="/{entity}",
      *     @OA\Parameter(
      *         name="entity",
@@ -49,12 +60,58 @@ class EntityManagerController extends AbstractController
      *         )
      *     )
      * )
+     * @throws ORMException
      */
 
-    public function check()
+    public function entity(array $params)
     {
-        header('Content-Type: application/json; charset=utf-8');
-        $response = new JSONResponse(true);
+        $errorAttr = "";
+        $errorNameEntity = "";
+        $dataResponse = "";
+        if (array_key_exists("get", $params)) {
+            foreach ($params["get"] as $nameEntity => $values)
+                switch ($nameEntity) {
+                    case("user"):
+                        $repo = $this->entityManager->getRepository(User::class);
+                        $dataResponse = $repo->findBy($params['get']['user']);
+                }
+
+        }
+        if (array_key_exists("create", $params)) {
+            foreach ($params["create"] as $name => $value) {
+                try {
+                    switch ($name) {
+                        case ("user"):
+                            $newUser = new User();
+                            $newUser->setCreatedAt(new \DateTime('now'));
+                            foreach ($params['create']['user'] as $nameAttr => $valueAttr) {
+                                switch ($nameAttr) {
+                                    case('last_connection'):
+                                        break;
+                                    default:
+                                        try{
+                                            $setter = 'set' . ucfirst($nameAttr);
+                                            $newUser->$setter($valueAttr);
+                                        } catch (\Exception $e){
+                                            $errorAttr = $nameAttr;
+                                            $errorNameEntity = 'user';
+                                        }
+
+                                }
+                            }
+
+                    }
+                    $this->entityManager->persist($newUser);
+                    $this->entityManager->flush();
+                    break;
+                }catch(Exception $exception) {
+                    $error = printf('%s is not defined as attribute of %s',$errorAttr,$errorNameEntity);
+                }
+            }
+
+        }
+
+        $response = new JSONResponse($dataResponse);
         $response->send();
     }
 }
