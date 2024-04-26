@@ -73,7 +73,7 @@ class EntityManagerController extends AbstractController
                 switch ($nameEntity) {
                     case("user"):
                         $repo = $this->entityManager->getRepository(User::class);
-                        $dataResponse = $repo->findAll();
+                        $dataResponse = $repo->findBy($params['get']['user']);
                 }
 
         }
@@ -102,7 +102,6 @@ class EntityManagerController extends AbstractController
                             }
                             $this->entityManager->persist($newUser);
                             $this->entityManager->flush();
-                            $this->entityManager->refresh($newUser);
                             break;
                     }
                 }catch(Exception $exception) {

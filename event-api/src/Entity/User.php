@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "User")]
-class User
+class User implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
@@ -238,7 +238,6 @@ class User
         return [
             'id' => $this->id,
             'last_connection' => $this->last_connection,
-            'client' => $this->client,
             'password' => $this->password,
             'email' => $this->email,
             'organization' => $this->organization,
