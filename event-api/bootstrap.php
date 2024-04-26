@@ -9,7 +9,7 @@ use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$paths = ['./src/entity'];
+$paths = [__DIR__ . '/src/entity'];
 $isDevMode = false;
 
 $dbParams = [
