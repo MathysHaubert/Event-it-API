@@ -12,6 +12,8 @@ use App\Entity\Organization;
 use App\Entity\Reservation;
 use App\Entity\Room;
 use App\Entity\Status;
+use Doctrine\DBAL\Exception;
+use Doctrine\ORM\Exception\ORMException;
 use OpenApi\Annotations as OA;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
@@ -58,37 +60,57 @@ class EntityManagerController extends AbstractController
      *         )
      *     )
      * )
+     * @throws ORMException
      */
 
     public function entity(array $params)
     {
+        $errorAttr = "";
+        $errorNameEntity = "";
         $dataResponse = "";
-        if (array_key_exists("get",$params)) {
-            foreach ($params["get"] as $name => $value)
-            if ($value === "example") {
-                $repo = $this->entityManager->getRepository(User::class);
-                $dataResponse = $repo->findBy(["email" => "toto@example.com"]); // TODO: implement findBy to search for a specifi entity
+        if (array_key_exists("get", $params)) {
+            foreach ($params["get"] as $nameEntity => $values)
+                switch ($nameEntity) {
+                    case("user"):
+                        $repo = $this->entityManager->getRepository(User::class);
+                        $dataResponse = $repo->findBy($params['get']['user']);
+                }
+
+        }
+        if (array_key_exists("create", $params)) {
+            foreach ($params["create"] as $name => $value) {
+                try {
+                    switch ($name) {
+                        case ("user"):
+                            $newUser = new User();
+                            $newUser->setCreatedAt(new \DateTime('now'));
+                            foreach ($params['create']['user'] as $nameAttr => $valueAttr) {
+                                switch ($nameAttr) {
+                                    case('last_connection'):
+                                        break;
+                                    default:
+                                        try{
+                                            $setter = 'set' . ucfirst($nameAttr);
+                                            $newUser->$setter($valueAttr);
+                                        } catch (\Exception $e){
+                                            $errorAttr = $nameAttr;
+                                            $errorNameEntity = 'user';
+                                        }
+
+                                }
+                            }
+
+                    }
+                    $this->entityManager->persist($newUser);
+                    $this->entityManager->flush();
+                    break;
+                }catch(Exception $exception) {
+                    $error = printf('%s is not defined as attribute of %s',$errorAttr,$errorNameEntity);
+                }
             }
 
         }
-        if (array_key_exists("create",$params)) {
-            foreach ($params["create"] as $name => $value) {
-                switch($name) {
-                    case ("user"):
-                        if ($value === "example") {
-                            $user = new User();
-                            $user->setLastConnection(new \DateTime('now'));
-                            $user->setPassword("toto");
-                            $user->setEmail("toto@example.com");
-                            $this->entityManager->persist($user);
-                            $this->entityManager->flush();
-                        } else {
-                            //TODO: return the right user
-                        }
-                        break;
-                }
-            }
-        }
+
         $response = new JSONResponse($dataResponse);
         $response->send();
     }
