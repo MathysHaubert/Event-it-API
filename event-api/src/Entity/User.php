@@ -14,7 +14,7 @@ class User
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private $id;
 
-    #[ORM\Column(type: "datetime")]
+    #[ORM\Column(type: "datetime",nullable: true)]
     private $last_connection;
 
     #[ORM\Column(type: "string", length: 255)]
@@ -27,7 +27,7 @@ class User
     #[ORM\JoinColumn(name: "organization_id", referencedColumnName: "id")]
     private $organization;
 
-    #[ORM\OneToMany(targetEntity: "Forum_message", mappedBy: "user")]
+    #[ORM\OneToMany(targetEntity: "ForumMessage", mappedBy: "user")]
     private $forum_messages;
 
     #[ORM\Column(type: "datetime")]

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "Forum_message")]
-class Forum_message
+class ForumMessage
 {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]

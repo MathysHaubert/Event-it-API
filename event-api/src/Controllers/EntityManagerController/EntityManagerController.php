@@ -73,7 +73,7 @@ class EntityManagerController extends AbstractController
                 switch ($nameEntity) {
                     case("user"):
                         $repo = $this->entityManager->getRepository(User::class);
-                        $dataResponse = $repo->findBy($params['get']['user']);
+                        $dataResponse = $repo->findAll();
                 }
 
         }
@@ -84,6 +84,7 @@ class EntityManagerController extends AbstractController
                         case ("user"):
                             $newUser = new User();
                             $newUser->setCreatedAt(new \DateTime('now'));
+                            $newUser->setLastConnection(new \DateTime('now'));
                             foreach ($params['create']['user'] as $nameAttr => $valueAttr) {
                                 switch ($nameAttr) {
                                     case('last_connection'):
@@ -99,18 +100,17 @@ class EntityManagerController extends AbstractController
 
                                 }
                             }
-
+                            $this->entityManager->persist($newUser);
+                            $this->entityManager->flush();
+                            $this->entityManager->refresh($newUser);
+                            break;
                     }
-                    $this->entityManager->persist($newUser);
-                    $this->entityManager->flush();
-                    break;
                 }catch(Exception $exception) {
-                    $error = printf('%s is not defined as attribute of %s',$errorAttr,$errorNameEntity);
+                    $error = printf('%s is not defined as attribute of %s: %s',$errorAttr,$errorNameEntity,$exception);
                 }
             }
 
         }
-
         $response = new JSONResponse($dataResponse);
         $response->send();
     }
