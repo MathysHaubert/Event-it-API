@@ -82,6 +82,8 @@ class EntityManagerController extends AbstractController
                             $user->setEmail("toto@example.com");
                             $this->entityManager->persist($user);
                             $this->entityManager->flush();
+                        } else {
+                            //TODO: return the right user
                         }
                         break;
                 }
