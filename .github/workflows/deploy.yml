@@ -32,7 +32,7 @@ jobs:
             # NOT SURE IF THIS WORKS
             chmod +x -R /home/pi/Event-it-API
             cd /home/pi/Event-it-API
-            git reset * --hard
+            git reset --hard
             git pull
             docker-compose down
             docker-compose build
