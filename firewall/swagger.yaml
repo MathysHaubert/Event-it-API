@@ -33,8 +33,8 @@ paths:
                 description: 'Connection status'
                 type: string
   '/{entity}':
-    post:
-      operationId: e633ab7dc0d7249b6a3b6921094abf3c
+    get:
+      operationId: 3bef539a9a6bfbc257e47b3b9189fa97
       parameters:
         -
           name: entity
@@ -54,9 +54,26 @@ paths:
               - status
       responses:
         '200':
-          description: 'Check if the connection is working.'
-          content:
-            application/json:
-              schema:
-                description: 'Connection status'
-                type: string
+          description: 'Request an entity to the API'
+    post:
+      operationId: a0d7eebea0354cbea18436f2390c3d8a
+      parameters:
+        -
+          name: entity
+          in: path
+          description: 'Entity name'
+          required: true
+          schema:
+            type: string
+            enum:
+              - user
+              - capteur
+              - forum
+              - forum_message
+              - organization
+              - reservation
+              - room
+              - status
+      responses:
+        '200':
+          description: 'Create the entity'

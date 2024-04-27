@@ -15,7 +15,7 @@ class User implements \JsonSerializable
     private $id;
 
     #[ORM\Column(type: "datetime",nullable: true)]
-    private $last_connection;
+    private $lastConnection;
 
     #[ORM\Column(type: "string", length: 255)]
     private $password;
@@ -28,17 +28,17 @@ class User implements \JsonSerializable
     private $organization;
 
     #[ORM\OneToMany(targetEntity: "ForumMessage", mappedBy: "user")]
-    private $forum_messages;
+    private $forumMessages;
 
     #[ORM\Column(type: "datetime")]
     #[ORM\GeneratedValue(strategy: "AUTO")]
-    private $created_at;
+    private $createdAt;
 
     #[ORM\Column(type: "string", length: 50)]
-    private $first_name;
+    private $firstName;
 
     #[ORM\Column(type: "string", length: 50)]
-    private $last_name;
+    private $lastName;
 
     #[ORM\Column(type: "string", length: 50)]
     private $role;
@@ -60,7 +60,7 @@ class User implements \JsonSerializable
      */
     public function getLastName(): ?string
     {
-        return $this->last_name;
+        return $this->lastName;
     }
 
     /**
@@ -70,7 +70,7 @@ class User implements \JsonSerializable
      */
     public function setLastName(string $last_name): self
     {
-        $this->last_name = $last_name;
+        $this->lastName = $last_name;
         return $this;
     }
 
@@ -80,7 +80,7 @@ class User implements \JsonSerializable
      */
     public function getFirstName(): ?string
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
     /**
@@ -90,7 +90,7 @@ class User implements \JsonSerializable
      */
     public function setFirstName(string $first_name): self
     {
-        $this->first_name = $first_name;
+        $this->firstName = $first_name;
         return $this;
     }
 
@@ -100,7 +100,7 @@ class User implements \JsonSerializable
      */
     public function getCreatedAt(): ?\DateTimeInterface
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     /**
@@ -110,7 +110,7 @@ class User implements \JsonSerializable
      */
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $created_at;
         return $this;
     }
 
@@ -120,7 +120,7 @@ class User implements \JsonSerializable
      */
     public function getLastConnection(): ?\DateTimeInterface
     {
-        return $this->last_connection;
+        return $this->lastConnection;
     }
 
     /**
@@ -130,7 +130,7 @@ class User implements \JsonSerializable
      */
     public function setLastConnection(\DateTimeInterface $last_connection): self
     {
-        $this->last_connection = $last_connection;
+        $this->lastConnection = $last_connection;
         return $this;
     }
 
@@ -196,20 +196,20 @@ class User implements \JsonSerializable
 
     /**
      * Get the value of forum_messages
-     * @return Forum_message[]|Collection
+     * @return ForumMessage[]|Collection
      */
     public function getForumMessages(): Collection
     {
-        return $this->forum_messages;
+        return $this->forumMessages;
     }
 
     /**
      * Add a forum_message to the user
-     * @param Forum_message $forum_message
+     * @param ForumMessage $forum_message
      */
-    public function addForumMessage(Forum_message $forum_message): void
+    public function addForumMessage(ForumMessage $forum_message): void
     {
-        $this->forum_messages[] = $forum_message;
+        $this->forumMessages[] = $forum_message;
         $forum_message->setUser($this);
     }
 
@@ -237,7 +237,8 @@ class User implements \JsonSerializable
     {
         return [
             'id' => $this->id,
-            'last_connection' => $this->last_connection,
+            'lastConnection' => $this->lastConnection,
+            'createdAt' => $this->createdAt,
             'password' => $this->password,
             'email' => $this->email,
             'organization' => $this->organization,
