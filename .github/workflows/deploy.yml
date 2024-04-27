@@ -47,7 +47,8 @@ jobs:
             DB_EXISTS=$(docker-compose exec -t db mysql-5.7 -u user -ppass -e "SHOW DATABASES LIKE 'event-API';" | grep "event-API")
             if [ -z "$DB_EXISTS" ]; then
               echo "Database does not exist, creating..."
-              docker-compose exec -t backend php src/bin/doctrine.php orm:schema-tool:create
+              docker-compose exec -T backend php src/bin/doctrine.php orm:schema-tool:create
+              echo "Database created."
             fi
   update_collection:
     runs-on: ubuntu-latest
