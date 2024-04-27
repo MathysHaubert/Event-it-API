@@ -5,8 +5,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\Table(name: "Forum_message")]
-class Forum_message
+#[ORM\Table(name: "ForumMessage")]
+class ForumMessage
 {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]

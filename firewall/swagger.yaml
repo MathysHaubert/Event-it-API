@@ -33,8 +33,8 @@ paths:
                 description: 'Connection status'
                 type: string
   '/{entity}':
-    get:
-      operationId: 5cadbfd2f93b3a312b193dec7264cc75
+    post:
+      operationId: e633ab7dc0d7249b6a3b6921094abf3c
       parameters:
         -
           name: entity

@@ -24,7 +24,7 @@ class Forum
     #[ORM\Column(type: "boolean")]
     private $close;
 
-    #[ORM\OneToMany(targetEntity: "Forum_message", mappedBy: "forum")]
+    #[ORM\OneToMany(targetEntity: "ForumMessage", mappedBy: "forum")]
     private $forum_messages;
 
     // getters and setters

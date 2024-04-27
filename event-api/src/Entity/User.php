@@ -7,14 +7,14 @@ use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "User")]
-class User
+class User implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private $id;
 
-    #[ORM\Column(type: "datetime")]
+    #[ORM\Column(type: "datetime",nullable: true)]
     private $last_connection;
 
     #[ORM\Column(type: "string", length: 255)]
@@ -27,7 +27,7 @@ class User
     #[ORM\JoinColumn(name: "organization_id", referencedColumnName: "id")]
     private $organization;
 
-    #[ORM\OneToMany(targetEntity: "Forum_message", mappedBy: "user")]
+    #[ORM\OneToMany(targetEntity: "ForumMessage", mappedBy: "user")]
     private $forum_messages;
 
     #[ORM\Column(type: "datetime")]
@@ -231,5 +231,16 @@ class User
     {
         $this->role = $role;
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'last_connection' => $this->last_connection,
+            'password' => $this->password,
+            'email' => $this->email,
+            'organization' => $this->organization,
+        ];
     }
 }

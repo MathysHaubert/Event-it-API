@@ -11,12 +11,13 @@ class JSONResponse
     public function __construct($data)
     {
         header('Content-Type: application/json');
-        http_response_code(404);
+        http_response_code(200);
         $this->data = json_encode($data);
     }
 
-    public function send()
+    public function send(): void
     {
+
         echo $this->data;
     }
 }
