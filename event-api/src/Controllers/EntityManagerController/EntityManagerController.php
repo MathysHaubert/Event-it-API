@@ -3,21 +3,17 @@
 namespace App\Controllers\EntityManagerController;
 
 use App\Controllers\AbstractController;
+use App\Entity\ForumMessage;
 use App\Tools\JSONResponse;
 use App\Entity\User;
 use App\Entity\Forum;
-use App\Entity\Forum_message;
 use App\Entity\Capteurs;
 use App\Entity\Organization;
 use App\Entity\Reservation;
 use App\Entity\Room;
-use App\Entity\Status;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\Exception\ORMException;
 use OpenApi\Annotations as OA;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\ORMSetup;
 
 class EntityManagerController extends AbstractController
 {
@@ -31,11 +27,10 @@ class EntityManagerController extends AbstractController
         'user' => User::class,
         'capteur' => Capteurs::class,
         'forum' => Forum::class,
-        'forum_message' => Forum_message::class,
+        'forum_message' => ForumMessage::class,
         'organization' => Organization::class,
         'reservation' => Reservation::class,
         'room' => Room::class,
-        'status' => Status::class,
     ];
 
     /**
@@ -63,7 +58,7 @@ class EntityManagerController extends AbstractController
      * @throws ORMException
      */
 
-    public function entity(array $params)
+    public function entity(array $params): void
     {
         $errorAttr = "";
         $errorNameEntity = "";
@@ -87,6 +82,7 @@ class EntityManagerController extends AbstractController
                             $newUser->setLastConnection(new \DateTime('now'));
                             foreach ($params['create']['user'] as $nameAttr => $valueAttr) {
                                 switch ($nameAttr) {
+                                    case ('created_at'):
                                     case('last_connection'):
                                         break;
                                     default:
@@ -102,10 +98,12 @@ class EntityManagerController extends AbstractController
                             }
                             $this->entityManager->persist($newUser);
                             $this->entityManager->flush();
+                            $dataResponse = true;
                             break;
                     }
                 }catch(Exception $exception) {
-                    $error = printf('%s is not defined as attribute of %s: %s',$errorAttr,$errorNameEntity,$exception);
+                    $error = ["error" => []];
+                    $message = sprintf('%s is not defined as attribute of %s: %s',$errorAttr,$errorNameEntity,$exception);
                 }
             }
 
