@@ -17,12 +17,10 @@ use OpenApi\Annotations as OA;
 
 class EntityManagerController extends AbstractController
 {
-
     public function __construct()
     {
         parent::__construct();
     }
-
     const entity = [
         'user' => User::class,
         'capteur' => Capteurs::class,
@@ -32,7 +30,6 @@ class EntityManagerController extends AbstractController
         'reservation' => Reservation::class,
         'room' => Room::class,
     ];
-
     /**
      * @OA\Post(
      *     path="/{entity}",
@@ -70,7 +67,6 @@ class EntityManagerController extends AbstractController
                         $repo = $this->entityManager->getRepository(User::class);
                         $dataResponse = $repo->findBy($params['get']['user']);
                 }
-
         }
         if (array_key_exists("create", $params)) {
             foreach ($params["create"] as $name => $value) {
@@ -93,7 +89,6 @@ class EntityManagerController extends AbstractController
                                             $errorAttr = $nameAttr;
                                             $errorNameEntity = 'user';
                                         }
-
                                 }
                             }
                             $this->entityManager->persist($newUser);
@@ -103,10 +98,11 @@ class EntityManagerController extends AbstractController
                     }
                 }catch(Exception $exception) {
                     $error = ["error" => []];
-                    $message = sprintf('%s is not defined as attribute of %s: %s',$errorAttr,$errorNameEntity,$exception);
+                    $error['message'] = sprintf('%s is not defined as attribute of %s: %s',$errorAttr,$errorNameEntity,$exception);
+                    $response = new JSONResponse($error);
+                    $response->send();
                 }
             }
-
         }
         $response = new JSONResponse($dataResponse);
         $response->send();
