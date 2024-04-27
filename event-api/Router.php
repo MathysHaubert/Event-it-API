@@ -14,15 +14,16 @@ class Router
     {
         $routes = Yaml::parseFile($file);
         foreach ($routes as $name => $data) {
-            $this->addRoute($data['path'], $data['controller'], $data['method'], array_key_exists(key: 'params', array: $data) ? $data['params'] : []);
+            $this->addRoute($data['path'], $data['controller'], $data['method'],$data['request_methods'], array_key_exists(key: 'params', array: $data) ? $data['params'] : []);
         }
 
     }
 
-    public function addRoute($route, $controller, $method, $params): void
+    public function addRoute($route, $controller, $method,$requestMethods, $params): void
     {
         $this->routes[] = [
             'path' => $route,
+            'request_methods' => $requestMethods,
             'controller' => $controller,
             'method' => $method,
             'params' => $params];
@@ -40,7 +41,7 @@ class Router
             if (!empty($route['params'])) {
                 foreach ($route['params'] as $param) {
                     foreach ($param as $content) {
-                        if (preg_match("/".$content."/", $url, $matchesParams)) {
+                        if (preg_match("/" . $content . "/", $url, $matchesParams)) {
                             $entity = $matchesParams[0];
                             preg_match_all("/{[a-zA-Z]+}/", $route['path'], $matchesPath);
                             $route['path'] = str_replace($matchesPath[0], $entity, $route['path']);
@@ -48,23 +49,19 @@ class Router
                     }
                 }
             }
-                if ($route['path'] === explode("?",$url)[0]) { // check if the class exists
-                    if (!class_exists($route['controller'])) {
-                        echo "{$route['controller']} not found";
-                        return;
-                    } else {
-                        $controller = new $route['controller'];
-                        $method = $route['method'];
-                        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                            $data = $_GET;
-                        } else {
-                            $data = json_decode(file_get_contents('php://input'), true);
-                        }
-                        $controller->$method($data ?? []);
-                        return;
-                    }
+            if ($route['path'] === explode("?", $url)[0] && in_array($_SERVER['REQUEST_METHOD'],$route['request_methods'])) { // check if the class exists
+                if (!class_exists($route['controller'])) {
+                    echo "{$route['controller']} not found";
+                    return;
+                } else {
+                    $controller = new $route['controller'];
+                    $method = $route['method'];
+                    $data = json_decode(file_get_contents('php://input'), true);
+                    $controller->$method($data ?? []);
+                    return;
                 }
             }
-            echo "404 Not Found";
         }
+        echo "404 Not Found";
     }
+}

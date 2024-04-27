@@ -21,6 +21,7 @@ class EntityManagerController extends AbstractController
     {
         parent::__construct();
     }
+
     const entity = [
         'user' => User::class,
         'capteur' => Capteurs::class,
@@ -30,6 +31,41 @@ class EntityManagerController extends AbstractController
         'reservation' => Reservation::class,
         'room' => Room::class,
     ];
+
+    /**
+     * @OA\Get(
+     *     path="/{entity}",
+     *     @OA\Parameter(
+     *         name="entity",
+     *         in="path",
+     *         required=true,
+     *         description="Entity name",
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"user", "capteur", "forum", "forum_message", "organization", "reservation", "room", "status"}
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Request an entity to the API",
+     *     )
+     * )
+     */
+
+    public function getEntity(array $params): void
+    {
+        $entity = $this->extractEntity();
+        $dataResponse = "";
+        switch ($entity) {
+            case("user"):
+                $repo = $this->entityManager->getRepository(User::class);
+                $dataResponse = $repo->findBy($params);
+        }
+
+        $response = new JSONResponse($dataResponse);
+        $response->send();
+    }
+
     /**
      * @OA\Post(
      *     path="/{entity}",
@@ -45,66 +81,44 @@ class EntityManagerController extends AbstractController
      *     ),
      *     @OA\Response(
      *         response="200",
-     *         description="Check if the connection is working.",
-     *         @OA\JsonContent(
-     *             type="string",
-     *             description="Connection status",
-     *         )
+     *         description="Create the entity",
      *     )
      * )
      * @throws ORMException
      */
-
-    public function entity(array $params): void
+    public function createEntity(array $params): void
     {
         $errorAttr = "";
         $errorNameEntity = "";
-        $dataResponse = "";
-        if (array_key_exists("get", $params)) {
-            foreach ($params["get"] as $nameEntity => $values)
-                switch ($nameEntity) {
-                    case("user"):
-                        $repo = $this->entityManager->getRepository(User::class);
-                        $dataResponse = $repo->findBy($params['get']['user']);
-                }
-        }
-        if (array_key_exists("create", $params)) {
-            foreach ($params["create"] as $name => $value) {
-                try {
-                    switch ($name) {
-                        case ("user"):
-                            $newUser = new User();
-                            $newUser->setCreatedAt(new \DateTime('now'));
-                            $newUser->setLastConnection(new \DateTime('now'));
-                            foreach ($params['create']['user'] as $nameAttr => $valueAttr) {
-                                switch ($nameAttr) {
-                                    case ('created_at'):
-                                    case('last_connection'):
-                                        break;
-                                    default:
-                                        try{
-                                            $setter = 'set' . ucfirst($nameAttr);
-                                            $newUser->$setter($valueAttr);
-                                        } catch (\Exception $e){
-                                            $errorAttr = $nameAttr;
-                                            $errorNameEntity = 'user';
-                                        }
-                                }
-                            }
-                            $this->entityManager->persist($newUser);
-                            $this->entityManager->flush();
-                            $dataResponse = true;
-                            break;
+        $dataResponse = "Someting get wrong";
+        $entity = $this->extractEntity();
+        try {
+            switch ($entity) {
+                case ("user"):
+                    $newEntity = new User();
+                    $newEntity->setCreatedAt(new \DateTime('now'));
+                    $newEntity->setLastConnection(new \DateTime('now'));
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $newEntity->$setter($value);
                     }
-                }catch(Exception $exception) {
-                    $error = ["error" => []];
-                    $error['message'] = sprintf('%s is not defined as attribute of %s: %s',$errorAttr,$errorNameEntity,$exception);
-                    $response = new JSONResponse($error);
-                    $response->send();
-                }
+                    break;
             }
+            $this->entityManager->persist($newEntity);
+            $this->entityManager->flush();
+            $dataResponse = true;
+        } catch (Exception $exception) {
+            $error = ["error" => []];
+            $error['message'] = sprintf('%s', $exception);
+            $response = new JSONResponse($error);
+            $response->send();
         }
         $response = new JSONResponse($dataResponse);
         $response->send();
+    }
+
+    private function extractEntity(): string
+    {
+        return str_replace("/", "", $_SERVER['REQUEST_URI']);
     }
 }

@@ -1,19 +1,27 @@
 event-api.check-connection:
   path: /connection
-  methods: [GET]
+  request_methods: [GET]
   controller: App\Controllers\Connection\ConnectionController
   method: check
 
 event-api.examples-token:
   path: /getExampleToken
-  methods: [GET]
+  request_methods: [GET]
   controller: App\Controllers\Connection\ConnectionController
   method: exampleJWT
 
 event-api.get-entity:
   path: /{entity}
-  methods: [POST]
+  request_methods: [GET]
   controller: App\Controllers\EntityManagerController\EntityManagerController
-  method: entity
+  method: getEntity
   params:
-    entity: [user, capteur, forum, forum_message, organization, reservation, room, status]
+    entity: [user, capteur, forum, forum_message, organization, reservation, room]
+
+event-api.create-entity:
+  path: /{entity}
+  request_methods: [POST]
+  controller: App\Controllers\EntityManagerController\EntityManagerController
+  method: createEntity
+  params:
+    entity: [user, capteur, forum, forum_message, organization, reservation, room]
