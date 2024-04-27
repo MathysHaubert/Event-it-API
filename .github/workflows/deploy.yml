@@ -32,6 +32,7 @@ jobs:
             # NOT SURE IF THIS WORKS
             chmod +x -R /home/pi/Event-it-API
             cd /home/pi/Event-it-API
+            git reset * --hard
             git pull
             docker-compose down
             docker-compose build
@@ -49,7 +50,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Update Postman Collection
-        env :
+        env:
           POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
         run: |
           chmod +x -R ./.github/
