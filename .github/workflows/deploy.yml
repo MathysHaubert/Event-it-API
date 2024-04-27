@@ -39,8 +39,14 @@ jobs:
             docker-compose up -d
             sleep 10 # wait for containers to start
             docker-compose exec -t backend composer install
+            docker-compose exec -t db bash -c "
+              wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /wait-for-it.sh && \
+              chmod +x /wait-for-it.sh && \
+              /wait-for-it.sh localhost:3306 -t 60
+            "
             DB_EXISTS=$(docker-compose exec -t db mysql-5.7 -u user -ppass -e "SHOW DATABASES LIKE 'event-API';" | grep "event-API")
             if [ -z "$DB_EXISTS" ]; then
+              echo "Database does not exist, creating..."
               docker-compose exec -t backend php src/bin/doctrine.php orm:schema-tool:create
             fi
   update_collection:
