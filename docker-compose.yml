@@ -25,7 +25,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: php:8.2-apache
+    image: php:8.3.7RC1-apache-bookworm
     container_name: php-api
     restart: on-failure
     ports:
