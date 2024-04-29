@@ -23,7 +23,7 @@ services:
       - api-firewall-network
   backend:
     build:
-      context: .
+      context: ./event-api
       dockerfile: Dockerfile
     image: php:8.2-apache
     container_name: php-api
