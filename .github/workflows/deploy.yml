@@ -35,7 +35,7 @@ jobs:
             git reset --hard
             git pull
             docker-compose down
-            docker-compose build
+            # docker-compose build
             docker-compose up -d
             sleep 30 # wait for containers to start
             docker-compose exec -t backend composer install
