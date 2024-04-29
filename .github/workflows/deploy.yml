@@ -37,7 +37,7 @@ jobs:
             docker-compose down
             # docker-compose build
             docker-compose up -d
-            sleep 30 # wait for containers to start
+            sleep 180 # wait for containers to start
             docker-compose exec -t backend composer install
             docker-compose exec -t db bash -c "
               wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /wait-for-it.sh && \
