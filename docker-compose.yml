@@ -49,7 +49,7 @@ services:
     networks:
       - api-firewall-network
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: arm32v7/phpmyadmin
     container_name: phpmyadmin
     environment:
       PMA_HOST: db
