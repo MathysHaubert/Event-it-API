@@ -23,9 +23,9 @@ services:
       - api-firewall-network
   backend:
     build:
-      context: .
+      context: ./config/php
       dockerfile: Dockerfile
-    image: php:8.2-apache
+    image: php:8.3.7RC1-apache-bookworm
     container_name: php-api
     restart: on-failure
     ports:
@@ -36,25 +36,27 @@ services:
     networks:
       - api-firewall-network
   db:
-    image: biarms/mysql:5.7.30
-    container_name: mysql-5.7
+    image: mysql
+    container_name: mysql
     command: --default-authentication-plugin=mysql_native_password
     ports:
       - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: event-API
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
+      MYSQL_USER: event-it
+      MYSQL_PASSWORD: password-for-event-it
     networks:
       - api-firewall-network
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin
+    image: phpmyadmin:5.2.0
     container_name: phpmyadmin
+    volumes:
+      - ./config/phpmyadmin/config.inc.php:/etc/phpmyadmin/config.inc.php
     environment:
       PMA_HOST: db
-      PMA_USER: user
-      PMA_PASSWORD: pass
+      PMA_USER: event-it
+      PMA_PASSWORD: password-for-event-it
       PMA_ARBITRARY: 1
     ports:
       - "8899:80"
