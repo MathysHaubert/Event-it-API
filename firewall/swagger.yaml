@@ -77,3 +77,23 @@ paths:
       responses:
         '200':
           description: 'Create the entity'
+  /login:
+    post:
+      operationId: ade206c55b8b4469b51d1572d61f9e83
+      requestBody:
+        description: 'User login data'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: 'User email'
+                password:
+                  type: string
+                  description: 'User password'
+      responses:
+        '200':
+          description: 'Request an entity to the API'
