@@ -97,3 +97,13 @@ paths:
       responses:
         '200':
           description: 'Request an entity to the API'
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
