@@ -32,6 +32,35 @@ paths:
               schema:
                 description: 'Connection status'
                 type: string
+  /login:
+    post:
+      operationId: 395dbc7a2086577e6e0658161be85ce6
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              type: object
+      responses:
+        '200':
+          description: 'Login to the API'
+          headers:
+            Access-Control-Allow-Origin:
+              description: 'CORS header'
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              description: 'CORS header'
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              description: 'CORS header'
+              schema:
+                type: string
   '/{entity}':
     get:
       operationId: 3bef539a9a6bfbc257e47b3b9189fa97
@@ -77,33 +106,3 @@ paths:
       responses:
         '200':
           description: 'Create the entity'
-  /login:
-    post:
-      operationId: ade206c55b8b4469b51d1572d61f9e83
-      requestBody:
-        description: 'User login data'
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  description: 'User email'
-                password:
-                  type: string
-                  description: 'User password'
-      responses:
-        '200':
-          description: 'Request an entity to the API'
-          headers:
-            Access-Control-Allow-Origin:
-              schema:
-                type: string
-            Access-Control-Allow-Methods:
-              schema:
-                type: string
-            Access-Control-Allow-Headers:
-              schema:
-                type: string

@@ -69,6 +69,11 @@ class ConnectionController extends AbstractController
      * @OA\Response(
      * response="200",
      * description="Login to the API",
+     * headers={
+     *     @OA\Header(header="Access-Control-Allow-Origin", description="CORS header", @OA\Schema(type="string")),
+     *     @OA\Header(header="Access-Control-Allow-Methods", description="CORS header", @OA\Schema(type="string")),
+     *     @OA\Header(header="Access-Control-Allow-Headers", description="CORS header", @OA\Schema(type="string"))
+     * }
      * )
      * )
      * @throws ORMException
