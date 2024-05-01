@@ -61,6 +61,24 @@ paths:
               description: 'CORS header'
               schema:
                 type: string
+    options:
+      operationId: c23e7d7bf7816ee6c0e1232b1b422689
+      responses:
+        '200':
+          description: 'Preflight response'
+          headers:
+            Access-Control-Allow-Origin:
+              description: 'CORS header'
+              schema:
+                type: string
+            Access-Control-Allow-Methods:
+              description: 'CORS header'
+              schema:
+                type: string
+            Access-Control-Allow-Headers:
+              description: 'CORS header'
+              schema:
+                type: string
   '/{entity}':
     get:
       operationId: 3bef539a9a6bfbc257e47b3b9189fa97
