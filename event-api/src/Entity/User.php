@@ -233,15 +233,18 @@ class User implements \JsonSerializable
         return $this;
     }
 
-    public function jsonSerialize(): array
+    public function jsonSerialize()
     {
         return [
-            'id' => $this->id,
-            'lastConnection' => $this->lastConnection,
-            'createdAt' => $this->createdAt,
-            'password' => $this->password,
-            'email' => $this->email,
-            'organization' => $this->organization,
+            'id' => $this->getId(),
+            'lastConnection' => $this->getLastConnection(),
+            'password' => $this->getPassword(),
+            'email' => $this->getEmail(),
+            'organization' => $this->getOrganization(),
+            'createdAt' => $this->getCreatedAt(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'role' => $this->getRole(),
         ];
     }
 }
