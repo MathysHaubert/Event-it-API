@@ -75,6 +75,9 @@ class ConnectionController extends AbstractController
      */
     public function login(array $params): void
     {
+        header("Access-Control-Allow-Origin: http://localhost:9000");
+        header("Access-Control-Allow-Methods: GET, POST");
+        header("Access-Control-Allow-Headers: Content-Type");
         $email = $params['email'];
         $password = $params['password'];
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
