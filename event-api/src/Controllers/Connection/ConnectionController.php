@@ -6,6 +6,7 @@ use App\Controllers\AbstractController;
 use OpenApi\Annotations as OA;
 use App\Tools\JSONResponse;
 use App\Tools\JWT;
+use App\Entity\User;
 
 class ConnectionController extends AbstractController
 {
@@ -52,5 +53,42 @@ class ConnectionController extends AbstractController
         echo print_r($jwt->getJWT());
         echo print_r($jwt->getPrivateKey());
         echo print_r($jwt->getPublicKey());
+    }
+
+
+    /**
+     * @OA\Post(
+     * path="/login",
+     * @OA\RequestBody(
+     * @OA\JsonContent(
+     * type="object",
+     * @OA\Property(property="email", type="string"),
+     * @OA\Property(property="password", type="string"),
+     * )
+     * ),
+     * @OA\Response(
+     * response="200",
+     * description="Login to the API",
+     * )
+     * )
+     * @throws ORMException
+     */
+    public function login(array $params): void
+    {
+        $email = $params['email'];
+        $password = $params['password'];
+        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+        if ($user === null) {
+            $response = new JSONResponse(['error' => 'User not found']);
+            $response->send();
+            return;
+        }
+        if ($password == $user->getPassword()) {
+            $response = new JSONResponse($user->jsonSerialize());
+            $response->send();
+        } else {
+            $response = new JSONResponse(['error' => 'Password not valid']);
+            $response->send();
+        }
     }
 }

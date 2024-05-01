@@ -25,3 +25,9 @@ event-api.create-entity:
   method: createEntity
   params:
     entity: [user, capteur, forum, forum_message, organization, reservation, room]
+
+event-api.login:
+  path: /login
+  request_methods: [POST]
+  controller: App\Controllers\Connetion\ConnectionController
+  method: login
