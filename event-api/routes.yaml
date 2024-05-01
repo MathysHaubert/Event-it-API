@@ -29,5 +29,5 @@ event-api.create-entity:
 event-api.login:
   path: /login
   request_methods: [POST]
-  controller: App\Controllers\Connetion\ConnectionController
+  controller: App\Controllers\Connection\ConnectionController
   method: login

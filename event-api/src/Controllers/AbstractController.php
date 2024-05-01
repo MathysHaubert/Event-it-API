@@ -36,8 +36,8 @@ abstract class AbstractController
             'host' => 'db', // This is the service name defined in your Docker Compose file
             'port' => 3306, // Default MySQL port
             'dbname' => 'event-API',
-            'user' => 'user',
-            'password' => 'pass',
+            'user' => 'event-it',
+            'password' => 'password-for-event-it',
         ];
 
         $dbalConnection = DriverManager::getConnection($connectionParams, $config);
