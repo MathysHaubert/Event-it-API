@@ -8,6 +8,7 @@ use App\Tools\JSONResponse;
 use App\Entity\User;
 use App\Entity\Forum;
 use App\Entity\Capteurs;
+use App\Entity\CapteurArchive;
 use App\Entity\Organization;
 use App\Entity\Reservation;
 use App\Entity\Room;
@@ -25,6 +26,7 @@ class EntityManagerController extends AbstractController
     const entity = [
         'user' => User::class,
         'capteur' => Capteurs::class,
+        'capteurArchive' => CapteurArchive::class,
         'forum' => Forum::class,
         'forum_message' => ForumMessage::class,
         'organization' => Organization::class,
@@ -60,6 +62,35 @@ class EntityManagerController extends AbstractController
             case("user"):
                 $repo = $this->entityManager->getRepository(User::class);
                 $dataResponse = $repo->findBy($params);
+                break;
+            case("capteur"):
+                $repo = $this->entityManager->getRepository(Capteurs::class);
+                $dataResponse = $repo->findBy($params);
+                break;
+            case("capteurArchive"):
+                $repo = $this->entityManager->getRepository(CapteurArchive::class);
+                $dataResponse = $repo->findBy($params);
+                break;
+            case("forum"):
+                $repo = $this->entityManager->getRepository(Forum::class);
+                $dataResponse = $repo->findBy($params);
+                break;
+            case("forum_message"):
+                $repo = $this->entityManager->getRepository(ForumMessage::class);
+                $dataResponse = $repo->findBy($params);
+                break;
+            case("organization"):
+                $repo = $this->entityManager->getRepository(Organization::class);
+                $dataResponse = $repo->findBy($params);
+                break;
+            case("reservation"):
+                $repo = $this->entityManager->getRepository(Reservation::class);
+                $dataResponse = $repo->findBy($params);
+                break;
+            case("room"):
+                $repo = $this->entityManager->getRepository(Room::class);
+                $dataResponse = $repo->findBy($params);
+                break;
         }
 
         $response = new JSONResponse($dataResponse);
