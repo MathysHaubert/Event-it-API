@@ -3,10 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "Reservation")]
-class Reservation
+class Reservation implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -26,6 +27,9 @@ class Reservation
     #[ORM\ManyToOne(targetEntity: "Room", inversedBy: "reservations")]
     #[ORM\JoinColumn(name: "room_id", referencedColumnName: "id")]
     private $room;
+
+    #[ORM\OneToMany(targetEntity: "CapteurArchive", mappedBy: "reservation")]
+    private $capteurArchive;
 
     // getters and setters
 
@@ -112,5 +116,47 @@ class Reservation
     {
         $this->room = $room;
         return $this;
+    }
+
+    /**
+     * Get the value of capteurArchive
+     * @return CapteurArchive[]|Collection|null
+     */
+    public function getCapteurArchive(): Collection | null
+    {
+        return $this->capteurArchive;
+    }
+
+    /**
+     * Set the value of capteurArchive
+     * @param CapteurArchive[]|Collection|null $capteurArchive
+     */
+    public function setCapteurArchive(Collection | null $capteurArchive): self
+    {
+        $this->capteurArchive = $capteurArchive;
+        return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        if($this->getCapteurArchive()===null){
+            $capteursArchive = null;
+        }
+
+        else{
+            $capteursArchive = [];
+            foreach($this->getCapteurArchive() as $capteurArchive){
+                $capteursArchive[] = $capteurArchive->jsonSerialize();
+            }
+        }
+
+        return [
+            'id' => $this->id,
+            'organization' => $this->organization,
+            'startAt' => $this->startAt,
+            'endAt' => $this->endAt,
+            'room' => $this->room,
+            'capteurArchive' => $capteursArchive
+        ];
     }
 }

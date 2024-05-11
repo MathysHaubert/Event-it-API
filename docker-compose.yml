@@ -46,6 +46,8 @@ services:
       MYSQL_DATABASE: event-API
       MYSQL_USER: event-it
       MYSQL_PASSWORD: password-for-event-it
+    volumes:
+      - db_data:/var/lib/mysql
     networks:
       - api-firewall-network
   phpmyadmin:
@@ -64,3 +66,7 @@ services:
       - db
     networks:
       - api-firewall-network
+
+volumes:
+  db_data:
+    name: db_data

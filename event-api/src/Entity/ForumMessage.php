@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "ForumMessage")]
-class ForumMessage
+class ForumMessage implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
@@ -150,5 +150,18 @@ class ForumMessage
     public function setPrimaryMessage(bool $primary_message): void
     {
         $this->primary_message = $primary_message;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'user' => $this->user->getId(),
+            'forum' => $this->forum->getId(),
+            'like' => $this->like,
+            'message' => $this->message,
+            'resolved' => $this->resolved,
+            'primary_message' => $this->primary_message
+        ];
     }
 }

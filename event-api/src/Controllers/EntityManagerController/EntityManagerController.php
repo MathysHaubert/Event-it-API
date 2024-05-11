@@ -13,6 +13,7 @@ use App\Entity\Organization;
 use App\Entity\Reservation;
 use App\Entity\Room;
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Exception\DatabaseRequired;
 use Doctrine\ORM\Exception\ORMException;
 use OpenApi\Annotations as OA;
 
@@ -44,7 +45,7 @@ class EntityManagerController extends AbstractController
      *         description="Entity name",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"user", "capteur", "forum", "forum_message", "organization", "reservation", "room", "status"}
+     *             enum={"user", "capteur", "capteur_archive", "forum", "forum_message", "organization", "reservation", "room", "status"}
      *         )
      *     ),
      *     @OA\Response(
@@ -107,7 +108,7 @@ class EntityManagerController extends AbstractController
      *         description="Entity name",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"user", "capteur", "forum", "forum_message", "organization", "reservation", "room", "status"}
+     *             enum={"user", "capteur", "capteur_archive", "forum", "forum_message", "organization", "reservation", "room", "status"}
      *         )
      *     ),
      *     @OA\Response(
@@ -134,8 +135,160 @@ class EntityManagerController extends AbstractController
                         $newEntity->$setter($value);
                     }
                     break;
+                case ("capteur"):
+                    $newEntity = new Capteurs();
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $newEntity->$setter($value);
+                    }
+                    break;
+                case ("capteur_archive"):
+                    $newEntity = new CapteurArchive();
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $newEntity->$setter($value);
+                    }
+                    break;
+                case ("forum"):
+                    $newEntity = new Forum();
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $newEntity->$setter($value);
+                    }
+                    break;
+                case ("forum_message"):
+                    $newEntity = new ForumMessage();
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $newEntity->$setter($value);
+                    }
+                    break;
+                case ("organization"):
+                    $newEntity = new Organization();
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $newEntity->$setter($value);
+                    }
+                    break;
+                case ("reservation"):
+                    $newEntity = new Reservation();
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $newEntity->$setter($value);
+                    }
+                    break;
+                case ("room"):
+                    $newEntity = new Room();
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $newEntity->$setter($value);
+                    }
+                    break;
             }
             $this->entityManager->persist($newEntity);
+            $this->entityManager->flush();
+            $dataResponse = true;
+        } catch (Exception $exception) {
+            $error = ["error" => []];
+            $error['message'] = sprintf('%s', $exception);
+            $response = new JSONResponse($error);
+            $response->send();
+        }
+        $response = new JSONResponse($dataResponse);
+        $response->send();
+    }
+
+    /**
+     * @OA/Update(
+     *    path="/{entity}",
+     *   @OA\Parameter(
+     *        name="entity",
+     *       in="path",
+     *      required=true,
+     *    description="Entity name",
+     *  @OA\Schema(
+     *     type="string",
+     *   enum={"user", "capteur", "capteur_archive", "forum", "forum_message", "organization", "reservation", "room", "status"}
+     * )
+     * ),
+     * @OA\Response(
+     *    response="200",
+     *  description="Update the entity",
+     * )
+     * )
+     * @throws ORMException
+     */
+    public function updateEntity(array $params): void
+    {
+        $entity = $this->extractEntity();
+        $dataResponse = "Someting get wrong";
+        try {
+            switch ($entity) {
+                case ("user"):
+                    $repo = $this->entityManager->getRepository(User::class);
+                    $entity = $repo->find($params['id']);
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $entity->$setter($value);
+                    }
+                    break;
+                case ("capteur"):
+                    $repo = $this->entityManager->getRepository(Capteurs::class);
+                    $entity = $repo->find($params['id']);
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $entity->$setter($value);
+                    }
+                    break;
+                case ("capteur_archive"):
+                    $repo = $this->entityManager->getRepository(CapteurArchive::class);
+                    $entity = $repo->find($params['id']);
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $entity->$setter($value);
+                    }
+                    break;
+                case ("forum"):
+                    $repo = $this->entityManager->getRepository(Forum::class);
+                    $entity = $repo->find($params['id']);
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $entity->$setter($value);
+                    }
+                    break;
+                case ("forum_message"):
+                    $repo = $this->entityManager->getRepository(ForumMessage::class);
+                    $entity = $repo->find($params['id']);
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $entity->$setter($value);
+                    }
+                    break;
+                case ("organization"):
+                    $repo = $this->entityManager->getRepository(Organization::class);
+                    $entity = $repo->find($params['id']);
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $entity->$setter($value);
+                    }
+                    break;
+                case ("reservation"):
+                    $repo = $this->entityManager->getRepository(Reservation::class);
+                    $entity = $repo->find($params['id']);
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $entity->$setter($value);
+                    }
+                    break;
+                case ("room"):
+                    $repo = $this->entityManager->getRepository(Room::class);
+                    $entity = $repo->find($params['id']);
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $entity->$setter($value);
+                    }
+                    break;
+            }
             $this->entityManager->flush();
             $dataResponse = true;
         } catch (Exception $exception) {

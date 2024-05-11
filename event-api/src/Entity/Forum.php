@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "Forum")]
-class Forum
+class Forum implements \JsonSerializable
 {
     #[ORM\Column(type: "datetime")]
     private $last_modified;
@@ -141,5 +141,23 @@ class Forum
         $this->forum_messages = $forum_messages;
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        $forumMessagesId = [];
+
+        foreach ($this->forum_messages as $forumMessage) {
+            $forumMessagesId[] = $forumMessage->getId();
+        }
+
+        return [
+            'id' => $this->id,
+            'last_modified' => $this->last_modified,
+            'post_number' => $this->post_number,
+            'last_post' => $this->last_post,
+            'close' => $this->close,
+            'forum_messages' => $forumMessagesId,
+        ];
     }
 }

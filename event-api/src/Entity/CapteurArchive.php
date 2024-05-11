@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "Capteur_Archive")]
-class CapteurArchive
+class CapteurArchive implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
@@ -107,5 +107,16 @@ class CapteurArchive
     public function setReservation(?Reservation $reservation): void
     {
         $this->reservation = $reservation;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->id,
+            'meanValue' => $this->meanValue,
+            'maxValue' => $this->maxValue,
+            'minValue' => $this->minValue,
+            'reservation' => $this->reservation->getId(),
+        ];
     }
 }
