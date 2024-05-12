@@ -105,8 +105,8 @@ class CapteurArchive implements \JsonSerializable
      * @param Reservation|null $reservation
      */
     public function setReservation(?Reservation $reservation): void
-    {
-        $this->reservation = $reservation;
+        {
+            $this->reservation = $reservation;
     }
 
     public function jsonSerialize(): mixed

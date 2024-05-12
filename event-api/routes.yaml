@@ -16,7 +16,7 @@ event-api.get-entity:
   controller: App\Controllers\EntityManagerController\EntityManagerController
   method: getEntity
   params:
-    entity: [user, capteur, capteurArchive, forum, forumMessage, organization, reservation, room]
+    entity: [user, capteur, CapteurArchive, forum, ForumMessage, organization, reservation, room]
 
 event-api.create-entity:
   path: /{entity}
@@ -24,7 +24,7 @@ event-api.create-entity:
   controller: App\Controllers\EntityManagerController\EntityManagerController
   method: createEntity
   params:
-    entity: [user, capteur, capteurArchive, forum, forumMessage, organization, reservation, room]
+    entity: [user, capteur, CapteurArchive, forum, ForumMessage, organization, reservation, room]
 
 event-api.update-entity:
   path: /{entity}/{id}
@@ -32,7 +32,7 @@ event-api.update-entity:
   controller: App\Controllers\EntityManagerController\EntityManagerController
   method: updateEntity
   params:
-    entity: [user, capteur, capteurArchive, forum, forumMessage, organization, reservation, room]
+    entity: [user, capteur, CapteurArchive, forum, ForumMessage, organization, reservation, room]
     id: \d+
 
 event-api.login:
