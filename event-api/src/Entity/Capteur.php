@@ -22,7 +22,7 @@ class Capteur implements \JsonSerializable
     #[ORM\Column(type: "float")]
     private $value;
 
-    #[ORM\ManyToOne(targetEntity: "Room")]
+    #[ORM\ManyToOne(targetEntity: "Room", inversedBy: "capteur")]
     #[ORM\JoinColumn(name: "room_id", referencedColumnName: "id")]
     private $room;
 
@@ -117,7 +117,7 @@ class Capteur implements \JsonSerializable
             return $this;
         }
 
-        public function jsonSerialize()
+        public function jsonSerialize(): mixed
         {
             return [
                 'id' => $this->id,

@@ -23,7 +23,7 @@ class User implements \JsonSerializable
     #[ORM\Column(type: "string", length: 255)]
     private $email;
 
-    #[ORM\ManyToOne(targetEntity: "Organization")]
+    #[ORM\ManyToOne(targetEntity: "Organization", inversedBy: "users")]
     #[ORM\JoinColumn(name: "organization_id", referencedColumnName: "id", nullable: true)]
     private $organization;
 
@@ -231,25 +231,6 @@ class User implements \JsonSerializable
     {
         $this->role = $role;
         return $this;
-    }
-
-    /**
-     * Get the value of User
-     * @return mixed
-     */
-    public function getUser() : mixed
-    {
-        return [
-            'id' => $this->getId(),
-            'lastConnection' => $this->getLastConnection(),
-            'password' => $this->getPassword(),
-            'email' => $this->getEmail(),
-            'organization' => $this->getOrganization(),
-            'createdAt' => $this->getCreatedAt(),
-            'firstName' => $this->getFirstName(),
-            'lastName' => $this->getLastName(),
-            'role' => $this->getRole(),
-        ];
     }
 
     public function jsonSerialize(): mixed

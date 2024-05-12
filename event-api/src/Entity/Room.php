@@ -115,7 +115,7 @@ class Room implements \JsonSerializable
      * Add a capteur
      * @param Capteurs $capteur
      */
-    public function addCapteur(Capteurs $capteur): void
+    public function addCapteur(Capteur $capteur): void
     {
         $this->capteur[] = $capteur;
         $capteur->setRoom($this);
@@ -125,22 +125,30 @@ class Room implements \JsonSerializable
      * Remove a capteur
      * @param Capteurs $capteur
      */
-    public function removeCapteur(Capteurs $capteur): void
+    public function removeCapteur(Capteur $capteur): void
     {
         $this->capteur->removeElement($capteur);
         $capteur->setRoom(null);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
 
         if($this->getCapteur() === null){
             $capteurs = null;
-        }
-        else{
+        } else{
             $capteurs = [];
             foreach ($this->getCapteur() as $capteur) {
                 $capteurs[] = $capteur->getId();
+            }
+        }
+
+        if($this->reservations === null){
+            $reservations = null;
+        } else{
+            $reservations = [];
+            foreach ($this->getReservations() as $reservation) {
+                $reservations[] = $reservation->getId();
             }
         }
 
@@ -148,7 +156,7 @@ class Room implements \JsonSerializable
             'id' => $this->id,
             'location' => $this->location,
             'integrated_at' => $this->integrated_at,
-            'reservations' => $this->reservations->getId(),
+            'reservations' => $reservations,
             'capteurs' => $capteurs,
         ];
     }

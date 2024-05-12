@@ -1,5 +1,5 @@
 <?php
-// src/Entity/Forum_message.php
+// src/Entity/ForumMessage.php
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -13,12 +13,11 @@ class ForumMessage implements \JsonSerializable
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: "User")]
+    #[ORM\ManyToOne(targetEntity: "User", inversedBy: "forumMessages")]
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id")]
     private $user;
 
-    #[ORM\ManyToOne(targetEntity: "Forum")]
-    #[ORM\JoinColumn(name: "forum_id", referencedColumnName: "id")]
+    #[ORM\ManyToOne(targetEntity: "Forum", inversedBy: "forum_messages")]
     private $forum;
 
     #[ORM\Column(type: "integer")]
@@ -152,7 +151,7 @@ class ForumMessage implements \JsonSerializable
         $this->primary_message = $primary_message;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return [
             'id' => $this->id,

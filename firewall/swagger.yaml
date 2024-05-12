@@ -93,9 +93,9 @@ paths:
             enum:
               - user
               - capteur
-              - capteur_archive
+              - capteurArchive
               - forum
-              - forum_message
+              - forumMessage
               - organization
               - reservation
               - room
@@ -116,9 +116,9 @@ paths:
             enum:
               - user
               - capteur
-              - capteur_archive
+              - capteurArchive
               - forum
-              - forum_message
+              - forumMessage
               - organization
               - reservation
               - room
@@ -141,9 +141,9 @@ components:
         enum:
           - user
           - capteur
-          - capteur_archive
+          - capteurArchive
           - forum
-          - forum_message
+          - forumMessage
           - organization
           - reservation
           - room

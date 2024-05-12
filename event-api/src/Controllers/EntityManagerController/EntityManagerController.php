@@ -7,13 +7,12 @@ use App\Entity\ForumMessage;
 use App\Tools\JSONResponse;
 use App\Entity\User;
 use App\Entity\Forum;
-use App\Entity\Capteurs;
+use App\Entity\Capteur;
 use App\Entity\CapteurArchive;
 use App\Entity\Organization;
 use App\Entity\Reservation;
 use App\Entity\Room;
 use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Exception\DatabaseRequired;
 use Doctrine\ORM\Exception\ORMException;
 use OpenApi\Annotations as OA;
 
@@ -26,10 +25,10 @@ class EntityManagerController extends AbstractController
 
     const entity = [
         'user' => User::class,
-        'capteur' => Capteurs::class,
+        'capteur' => Capteur::class,
         'capteurArchive' => CapteurArchive::class,
         'forum' => Forum::class,
-        'forum_message' => ForumMessage::class,
+        'forumMessage' => ForumMessage::class,
         'organization' => Organization::class,
         'reservation' => Reservation::class,
         'room' => Room::class,
@@ -45,7 +44,7 @@ class EntityManagerController extends AbstractController
      *         description="Entity name",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"user", "capteur", "capteur_archive", "forum", "forum_message", "organization", "reservation", "room", "status"}
+     *             enum={"user", "capteur", "capteurArchive", "forum", "forumMessage", "organization", "reservation", "room", "status"}
      *         )
      *     ),
      *     @OA\Response(
@@ -65,7 +64,7 @@ class EntityManagerController extends AbstractController
                 $dataResponse = $repo->findBy($params);
                 break;
             case("capteur"):
-                $repo = $this->entityManager->getRepository(Capteurs::class);
+                $repo = $this->entityManager->getRepository(Capteur::class);
                 $dataResponse = $repo->findBy($params);
                 break;
             case("capteurArchive"):
@@ -76,7 +75,7 @@ class EntityManagerController extends AbstractController
                 $repo = $this->entityManager->getRepository(Forum::class);
                 $dataResponse = $repo->findBy($params);
                 break;
-            case("forum_message"):
+            case("forumMessage"):
                 $repo = $this->entityManager->getRepository(ForumMessage::class);
                 $dataResponse = $repo->findBy($params);
                 break;
@@ -89,7 +88,7 @@ class EntityManagerController extends AbstractController
                 $dataResponse = $repo->findBy($params);
                 break;
             case("room"):
-                $repo = $this->entityManager->getRepository(Room::class);
+                    $repo = $this->entityManager->getRepository(Room::class);
                 $dataResponse = $repo->findBy($params);
                 break;
         }
@@ -108,7 +107,7 @@ class EntityManagerController extends AbstractController
      *         description="Entity name",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"user", "capteur", "capteur_archive", "forum", "forum_message", "organization", "reservation", "room", "status"}
+     *             enum={"user", "capteur", "capteurArchive", "forum", "forumMessage", "organization", "reservation", "room", "status"}
      *         )
      *     ),
      *     @OA\Response(
@@ -136,14 +135,14 @@ class EntityManagerController extends AbstractController
                     }
                     break;
                 case ("capteur"):
-                    $newEntity = new Capteurs();
+                    $newEntity = new Capteur();
                     foreach ($params as $name => $value) {
                         $setter = 'set' . ucfirst($name);
                         $newEntity->$setter($value);
                     }
                     break;
-                case ("capteur_archive"):
-                    $newEntity = new CapteurArchive();
+                case ("capteurArchive"):
+                    $newEntity = new capteurArchive();
                     foreach ($params as $name => $value) {
                         $setter = 'set' . ucfirst($name);
                         $newEntity->$setter($value);
@@ -156,7 +155,7 @@ class EntityManagerController extends AbstractController
                         $newEntity->$setter($value);
                     }
                     break;
-                case ("forum_message"):
+                case ("forumMessage"):
                     $newEntity = new ForumMessage();
                     foreach ($params as $name => $value) {
                         $setter = 'set' . ucfirst($name);
@@ -208,7 +207,7 @@ class EntityManagerController extends AbstractController
      *    description="Entity name",
      *  @OA\Schema(
      *     type="string",
-     *   enum={"user", "capteur", "capteur_archive", "forum", "forum_message", "organization", "reservation", "room", "status"}
+     *   enum={"user", "capteur", "capteurArchive", "forum", "forumMessage", "organization", "reservation", "room", "status"}
      * )
      * ),
      * @OA\Response(
@@ -233,14 +232,14 @@ class EntityManagerController extends AbstractController
                     }
                     break;
                 case ("capteur"):
-                    $repo = $this->entityManager->getRepository(Capteurs::class);
+                    $repo = $this->entityManager->getRepository(Capteur::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {
                         $setter = 'set' . ucfirst($name);
                         $entity->$setter($value);
                     }
                     break;
-                case ("capteur_archive"):
+                case ("capteurArchive"):
                     $repo = $this->entityManager->getRepository(CapteurArchive::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {
@@ -256,7 +255,7 @@ class EntityManagerController extends AbstractController
                         $entity->$setter($value);
                     }
                     break;
-                case ("forum_message"):
+                case ("forumMessage"):
                     $repo = $this->entityManager->getRepository(ForumMessage::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {

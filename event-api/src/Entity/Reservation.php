@@ -14,7 +14,7 @@ class Reservation implements \JsonSerializable
     #[ORM\Column(type: "integer")]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: "Organization")]
+    #[ORM\ManyToOne(targetEntity: "Organization", inversedBy: "reservations")]
     #[ORM\JoinColumn(nullable: false)]
     private $organization;
 
@@ -137,7 +137,7 @@ class Reservation implements \JsonSerializable
         return $this;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         if($this->getCapteurArchive()===null){
             $capteursArchive = null;
