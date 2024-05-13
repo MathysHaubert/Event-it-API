@@ -8,44 +8,46 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: "Forum")]
 class Forum implements \JsonSerializable
 {
-    #[ORM\Column(type: "datetime")]
-    private $last_modified;
+    #[ORM\Column(type: "datetime", name: "last_modified")]
+    private $lastModified;
 
     #[ORM\Id]
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: "integer", length: 255)]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
     private $id;
 
-    #[ORM\Column(type: "integer")]
-    private $post_number;
+    #[ORM\Column(type: "integer", name: "post_number")]
+    private $postNumber;
 
-    #[ORM\Column(type: "integer")]
-    private $last_post;
+    #[ORM\Column(type: "integer", name: "last_post")]
+    private $lastPost;
 
     #[ORM\Column(type: "boolean")]
     private $close;
 
     #[ORM\OneToMany(targetEntity: "ForumMessage", mappedBy: "forum")]
-    private $forum_messages;
+    #[ORM\JoinColumn(name: "forum_id")]
+    private $forumMessages;
 
     // getters and setters
 
     /**
-     * Get the value of last_modified
+     * Get the value of lastModified
      * @return \DateTimeInterface|null
      */ 
     public function getLastModified(): ?\DateTimeInterface
     {
-        return $this->last_modified;
+        return $this->lastModified;
     }
 
     /**
-     * Set the value of last_modified
-     * @param \DateTimeInterface $last_modified
+     * Set the value of lastModified
+     * @param \DateTimeInterface $lastModified
      * @return self
      */
-    public function setLastModified(\DateTimeInterface $last_modified): self
+    public function setLastModified(\DateTimeInterface $lastModified): self
     {
-        $this->last_modified = $last_modified;
+        $this->lastModified = $lastModified;
 
         return $this;
     }
@@ -60,43 +62,43 @@ class Forum implements \JsonSerializable
     }
 
     /**
-     * Get the value of post_number
+     * Get the value of postNumber
      * @return int|null
      */ 
     public function getPostNumber(): ?int
     {
-        return $this->post_number;
+        return $this->postNumber;
     }
 
     /**
-     * Set the value of post_number
-     * @param int $post_number
+     * Set the value of postNumber
+     * @param int $postNumber
      * @return self
      */
-    public function setPostNumber(int $post_number): self
+    public function setPostNumber(int $postNumber): self
     {
-        $this->post_number = $post_number;
+        $this->postNumber = $postNumber;
 
         return $this;
     }
 
     /**
-     * Get the value of last_post
+     * Get the value of lastPost
      * @return int|null
      */ 
     public function getLastPost(): ?int
     {
-        return $this->last_post;
+        return $this->lastPost;
     }
 
     /**
-     * Set the value of last_post
-     * @param int $last_post
+     * Set the value of lastPost
+     * @param int $lastPost
      * @return self
      */
-    public function setLastPost(int $last_post): self
+    public function setLastPost(int $lastPost): self
     {
-        $this->last_post = $last_post;
+        $this->lastPost = $lastPost;
 
         return $this;
     }
@@ -123,22 +125,22 @@ class Forum implements \JsonSerializable
     }
 
     /**
-     * Get the value of forum_messages
+     * Get the value of forumMessages
      * @return mixed
      */ 
     public function getForumMessages()
     {
-        return $this->forum_messages;
+        return $this->forumMessages;
     }
 
     /**
-     * Set the value of forum_messages
-     * @param mixed $forum_messages
+     * Set the value of forumMessages
+     * @param mixed $forumMessages
      * @return self
      */
-    public function setForumMessages($forum_messages): self
+    public function setForumMessages($forumMessages): self
     {
-        $this->forum_messages = $forum_messages;
+        $this->forumMessages = $forumMessages;
 
         return $this;
     }
@@ -147,17 +149,17 @@ class Forum implements \JsonSerializable
     {
         $forumMessagesId = [];
 
-        foreach ($this->forum_messages as $forumMessage) {
+        foreach ($this->forumMessages as $forumMessage) {
             $forumMessagesId[] = $forumMessage->getId();
         }
 
         return [
             'id' => $this->id,
-            'last_modified' => $this->last_modified,
-            'post_number' => $this->post_number,
-            'last_post' => $this->last_post,
+            'lastModified' => $this->lastModified,
+            'postNumber' => $this->postNumber,
+            'last¨Post' => $this->lastPost,
             'close' => $this->close,
-            'forum_messages' => $forumMessagesId,
+            'forumMessages' => $forumMessagesId,
         ];
     }
 }

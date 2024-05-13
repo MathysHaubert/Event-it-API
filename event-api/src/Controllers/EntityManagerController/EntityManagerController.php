@@ -132,13 +132,32 @@ class EntityManagerController extends AbstractController
                     $newEntity->setCreatedAt(new \DateTime('now'));
                     $newEntity->setLastConnection(new \DateTime('now'));
                     foreach ($params as $name => $value) {
+                        if($name === "organization"){
+                            $organization = $this->entityManager->getRepository(Organization::class)->find($value);
+                            if($organization === NULL){
+                                throw new \Exception("Organization does not exist");
+                                break;
+                            }
+                            $newEntity->setOrganization($organization);
+                            continue;
+                        }
                         $setter = 'set' . ucfirst($name);
                         $newEntity->$setter($value);
                     }
                     break;
                 case ("capteur"):
                     $newEntity = new Capteur();
+                    $newEntity->setTakenAt(new \DateTime('now'));
                     foreach ($params as $name => $value) {
+                        if($name === "room"){
+                            $room = $this->entityManager->getRepository(Room::class)->find($value);
+                            if($room === NULL){
+                                throw new \Exception("Room does not exist");
+                                break;
+                            }
+                            $newEntity->setRoom($room);
+                            continue;
+                        }
                         $setter = 'set' . ucfirst($name);
                         $newEntity->$setter($value);
                     }
@@ -148,6 +167,10 @@ class EntityManagerController extends AbstractController
                     foreach ($params as $name => $value) {
                         if($name === "reservation"){
                             $reservation = $this->entityManager->getRepository(Reservation::class)->find($value);
+                            if($reservation === NULL){
+                                throw new \Exception("Reservation does not exist");
+                                break;
+                            }
                             $newEntity->setReservation($reservation);
                             continue;
                         }
@@ -157,6 +180,7 @@ class EntityManagerController extends AbstractController
                     break;
                 case ("forum"):
                     $newEntity = new Forum();
+                    $newEntity->setLastModified(new \DateTime('now'));
                     foreach ($params as $name => $value) {
                         $setter = 'set' . ucfirst($name);
                         $newEntity->$setter($value);
@@ -165,6 +189,24 @@ class EntityManagerController extends AbstractController
                 case ("ForumMessage"):
                     $newEntity = new ForumMessage();
                     foreach ($params as $name => $value) {
+                        if($name === "forum"){
+                            $forum = $this->entityManager->getRepository(Forum::class)->find($value);
+                            if($forum === NULL){
+                                throw new \Exception("Forum does not exist");
+                                break;
+                            }
+                            $newEntity->setForum($forum);
+                            continue;
+                        }
+                        if($name === "user"){
+                            $user = $this->entityManager->getRepository(User::class)->find($value);
+                            if($user === NULL){
+                                throw new \Exception("User does not exist");
+                                break;
+                            }
+                            $newEntity->setUser($user);
+                            continue;
+                        }
                         $setter = 'set' . ucfirst($name);
                         $newEntity->$setter($value);
                     }
@@ -178,17 +220,23 @@ class EntityManagerController extends AbstractController
                     break;
                 case ("reservation"):
                     $newEntity = new Reservation();
-                    foreach ($params as $name => $value) {
-                        $setter = 'set' . ucfirst($name);
-                        $newEntity->$setter($value);
+                    $newEntity->setStartAt(new \DateTime($params['startAt']));
+                    $newEntity->setEndAt(new \DateTime($params['endAt']));
+                    $room = $this->entityManager->getRepository(Room::class)->find($params['room']);
+                    if($room === NULL){
+                        throw new \Exception("Room does not exist");
                     }
+                    $newEntity->setRoom($room);
+                    $organization = $this->entityManager->getRepository(Organization::class)->find($params['organization']);
+                    if($organization === NULL){
+                        throw new \Exception("Organization does not exist");
+                    }
+                    $newEntity->setOrganization($organization);
                     break;
                 case ("room"):
                     $newEntity = new Room();
-                    foreach ($params as $name => $value) {
-                        $setter = 'set' . ucfirst($name);
-                        $newEntity->$setter($value);
-                    }
+                    $newEntity->setLocation($params['location']);
+                    $newEntity->setIntegratedAt(new \DateTime($params['integratedAt']));
                     break;
             }
             $this->entityManager->persist($newEntity);

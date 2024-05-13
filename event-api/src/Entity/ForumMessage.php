@@ -20,7 +20,7 @@ class ForumMessage implements \JsonSerializable
     #[ORM\ManyToOne(targetEntity: "Forum", inversedBy: "forum_messages")]
     private $forum;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: "integer", name: "likeNumber")]
     private $like;
 
     #[ORM\Column(type: "string", length: 255)]
