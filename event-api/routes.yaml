@@ -27,13 +27,12 @@ event-api.create-entity:
     entity: [user, capteur, CapteurArchive, forum, ForumMessage, organization, reservation, room]
 
 event-api.update-entity:
-  path: /{entity}/{id}
-  request_methods: [PUT]
+  path: /{entity}
+  request_methods: [PATCH]
   controller: App\Controllers\EntityManagerController\EntityManagerController
   method: updateEntity
   params:
     entity: [user, capteur, CapteurArchive, forum, ForumMessage, organization, reservation, room]
-    id: \d+
 
 event-api.login:
   path: /login

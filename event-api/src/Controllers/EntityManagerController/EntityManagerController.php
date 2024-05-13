@@ -253,22 +253,22 @@ class EntityManagerController extends AbstractController
     }
 
     /**
-     * @OA/Update(
-     *    path="/{entity}",
-     *   @OA\Parameter(
-     *        name="entity",
-     *       in="path",
-     *      required=true,
-     *    description="Entity name",
-     *  @OA\Schema(
-     *     type="string",
-     *   enum={"user", "capteur", "CapteurArchive", "forum", "ForumMessage", "organization", "reservation", "room", "status"}
-     * )
-     * ),
-     * @OA\Response(
-     *    response="200",
-     *  description="Update the entity",
-     * )
+     * @OA\Patch(
+     *     path="/{entity}",
+     *     @OA\Parameter(
+     *         name="entity",
+     *         in="path",
+     *         required=true,
+     *         description="Entity name",
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"user", "capteur", "CapteurArchive", "forum", "ForumMessage", "organization", "reservation", "room", "status"}
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Create the entity",
+     *     )
      * )
      * @throws ORMException
      */
@@ -282,6 +282,9 @@ class EntityManagerController extends AbstractController
                     $repo = $this->entityManager->getRepository(User::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {
+                        if($name === "id"){     //not a big fan of this will have to make it work via the url
+                            continue;
+                        }
                         $setter = 'set' . ucfirst($name);
                         $entity->$setter($value);
                     }
@@ -290,6 +293,9 @@ class EntityManagerController extends AbstractController
                     $repo = $this->entityManager->getRepository(Capteur::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {
+                        if($name === "id"){     //not a big fan of this will have to make it work via the url
+                            continue;
+                        }
                         $setter = 'set' . ucfirst($name);
                         $entity->$setter($value);
                     }
@@ -298,6 +304,9 @@ class EntityManagerController extends AbstractController
                     $repo = $this->entityManager->getRepository(CapteurArchive::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {
+                        if($name === "id"){     //not a big fan of this will have to make it work via the url
+                            continue;
+                        }
                         $setter = 'set' . ucfirst($name);
                         $entity->$setter($value);
                     }
@@ -306,6 +315,9 @@ class EntityManagerController extends AbstractController
                     $repo = $this->entityManager->getRepository(Forum::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {
+                        if($name === "id"){     //not a big fan of this will have to make it work via the url
+                            continue;
+                        }
                         $setter = 'set' . ucfirst($name);
                         $entity->$setter($value);
                     }
@@ -314,6 +326,9 @@ class EntityManagerController extends AbstractController
                     $repo = $this->entityManager->getRepository(ForumMessage::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {
+                        if($name === "id"){     //not a big fan of this will have to make it work via the url
+                            continue;
+                        }
                         $setter = 'set' . ucfirst($name);
                         $entity->$setter($value);
                     }
@@ -322,6 +337,9 @@ class EntityManagerController extends AbstractController
                     $repo = $this->entityManager->getRepository(Organization::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {
+                        if($name === "id"){     //not a big fan of this will have to make it work via the url
+                            continue;
+                        }
                         $setter = 'set' . ucfirst($name);
                         $entity->$setter($value);
                     }
@@ -330,6 +348,9 @@ class EntityManagerController extends AbstractController
                     $repo = $this->entityManager->getRepository(Reservation::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {
+                        if($name === "id"){     //not a big fan of this will have to make it work via the url
+                            continue;
+                        }
                         $setter = 'set' . ucfirst($name);
                         $entity->$setter($value);
                     }
@@ -338,6 +359,9 @@ class EntityManagerController extends AbstractController
                     $repo = $this->entityManager->getRepository(Room::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {
+                        if($name === "id"){     //not a big fan of this will have to make it work via the url
+                            continue;
+                        }
                         $setter = 'set' . ucfirst($name);
                         $entity->$setter($value);
                     }

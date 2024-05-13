@@ -126,25 +126,26 @@ paths:
       responses:
         '200':
           description: 'Create the entity'
-components:
-  responses:
-    '200':
-      description: 'Update the entity'
-  parameters:
-    entity:
-      name: entity
-      in: path
-      description: 'Entity name'
-      required: true
-      schema:
-        type: string
-        enum:
-          - user
-          - capteur
-          - CapteurArchive
-          - forum
-          - ForumMessage
-          - organization
-          - reservation
-          - room
-          - status
+    patch:
+      operationId: 138550b22631dd6f66c1fcff825963e8
+      parameters:
+        -
+          name: entity
+          in: path
+          description: 'Entity name'
+          required: true
+          schema:
+            type: string
+            enum:
+              - user
+              - capteur
+              - CapteurArchive
+              - forum
+              - ForumMessage
+              - organization
+              - reservation
+              - room
+              - status
+      responses:
+        '200':
+          description: 'Create the entity'
