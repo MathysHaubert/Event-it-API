@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "Organization")]
-class Organization
+class Organization implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
@@ -98,5 +98,26 @@ class Organization
     {
         $this->reservations[] = $reservation;
         $reservation->setOrganization($this);
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        $users = [];
+        $reservations = [];
+
+        foreach ($this->getUsers() as $user) {
+            $users[] = $user->getId();
+        }
+
+        foreach ($this->getReservations() as $reservation) {
+            $reservations[] = $reservation->getId();
+        }
+
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'users' => $users,
+            'reservations' => $reservations,
+        ];
     }
 }

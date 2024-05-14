@@ -23,8 +23,8 @@ class User implements \JsonSerializable
     #[ORM\Column(type: "string", length: 255)]
     private $email;
 
-    #[ORM\ManyToOne(targetEntity: "Organization")]
-    #[ORM\JoinColumn(name: "organization_id", referencedColumnName: "id")]
+    #[ORM\ManyToOne(targetEntity: "Organization", inversedBy: "users")]
+    #[ORM\JoinColumn(name: "organization_id", referencedColumnName: "id", nullable: true)]
     private $organization;
 
     #[ORM\OneToMany(targetEntity: "ForumMessage", mappedBy: "user")]

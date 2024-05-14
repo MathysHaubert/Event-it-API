@@ -7,7 +7,7 @@ use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "Room")]
-class Room
+class Room implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
@@ -23,8 +23,8 @@ class Room
     #[ORM\OneToMany(targetEntity: "Reservation", mappedBy: "room")]
     private $reservations;
 
-    #[ORM\OneToMany(targetEntity: "Capteurs", mappedBy: "room")]
-    private $capteurs;
+    #[ORM\OneToMany(targetEntity: "Capteur", mappedBy: "room")]
+    private $capteur;
 
     // getters and setters
 
@@ -104,20 +104,20 @@ class Room
 
     /**
      * Get the value of capteurs
-     * @return Capteurs[]|Collection
+     * @return Capteurs[]|Collection|null
      */
-    public function getCapteurs(): Collection
+    public function getCapteur(): Collection | null
     {
-        return $this->capteurs;
+        return $this->capteur ?? null;
     }
 
     /**
      * Add a capteur
      * @param Capteurs $capteur
      */
-    public function addCapteur(Capteurs $capteur): void
+    public function addCapteur(Capteur $capteur): void
     {
-        $this->capteurs[] = $capteur;
+        $this->capteur[] = $capteur;
         $capteur->setRoom($this);
     }
 
@@ -125,9 +125,39 @@ class Room
      * Remove a capteur
      * @param Capteurs $capteur
      */
-    public function removeCapteur(Capteurs $capteur): void
+    public function removeCapteur(Capteur $capteur): void
     {
-        $this->capteurs->removeElement($capteur);
+        $this->capteur->removeElement($capteur);
         $capteur->setRoom(null);
+    }
+
+    public function jsonSerialize(): mixed
+    {
+
+        if($this->getCapteur() === null){
+            $capteurs = null;
+        } else{
+            $capteurs = [];
+            foreach ($this->getCapteur() as $capteur) {
+                $capteurs[] = $capteur->getId();
+            }
+        }
+
+        if($this->reservations === null){
+            $reservations = null;
+        } else{
+            $reservations = [];
+            foreach ($this->getReservations() as $reservation) {
+                $reservations[] = $reservation->getId();
+            }
+        }
+
+        return [
+            'id' => $this->id,
+            'location' => $this->location,
+            'integrated_at' => $this->integrated_at,
+            'reservations' => $reservations,
+            'capteurs' => $capteurs,
+        ];
     }
 }

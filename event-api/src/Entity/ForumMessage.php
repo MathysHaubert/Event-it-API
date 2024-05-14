@@ -1,27 +1,26 @@
 <?php
-// src/Entity/Forum_message.php
+// src/Entity/ForumMessage.php
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "ForumMessage")]
-class ForumMessage
+class ForumMessage implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: "User")]
+    #[ORM\ManyToOne(targetEntity: "User", inversedBy: "forumMessages")]
     #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id")]
     private $user;
 
-    #[ORM\ManyToOne(targetEntity: "Forum")]
-    #[ORM\JoinColumn(name: "forum_id", referencedColumnName: "id")]
+    #[ORM\ManyToOne(targetEntity: "Forum", inversedBy: "forum_messages")]
     private $forum;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: "integer", name: "likeNumber")]
     private $like;
 
     #[ORM\Column(type: "string", length: 255)]
@@ -150,5 +149,18 @@ class ForumMessage
     public function setPrimaryMessage(bool $primary_message): void
     {
         $this->primary_message = $primary_message;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'user' => $this->user->getId(),
+            'forum' => $this->forum->getId(),
+            'like' => $this->like,
+            'message' => $this->message,
+            'resolved' => $this->resolved,
+            'primary_message' => $this->primary_message
+        ];
     }
 }

@@ -1,23 +1,20 @@
 <?php
-// src/Entity/Capteurs.php
+// src/Entity/Capteur.php
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "Capteurs")]
-class Capteurs
+class Capteur implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
     #[ORM\GeneratedValue(strategy: "AUTO")]
     private $id;
 
-    #[ORM\Column(type: "date")]
-    private $date;
-
-    #[ORM\Column(type: "time")]
-    private $time;
+    #[ORM\Column(type: "datetime", name: "taken_at")]
+    private $takenAt;
 
     #[ORM\Column(type: "string", length: 255)]
     private $type;
@@ -25,7 +22,7 @@ class Capteurs
     #[ORM\Column(type: "float")]
     private $value;
 
-    #[ORM\ManyToOne(targetEntity: "Room")]
+    #[ORM\ManyToOne(targetEntity: "Room", inversedBy: "capteur")]
     #[ORM\JoinColumn(name: "room_id", referencedColumnName: "id")]
     private $room;
 
@@ -44,38 +41,18 @@ class Capteurs
          * Get the value of date
          * @return string|null
          */ 
-        public function getDate()
+        public function getTakenAt()
         {
-            return $this->date;
+            return $this->takenAt;
         }
 
         /**
          * Set the value of date
          * @return  self
          */ 
-        public function setDate($date)
+        public function setTakenAt($value)
         {
-            $this->date = $date;
-
-            return $this;
-        }
-
-        /**
-         * Get the value of time
-         * @return string|null
-         */ 
-        public function getTime()
-        {
-            return $this->time;
-        }
-
-        /**
-         * Set the value of time
-         * @return  self
-         */ 
-        public function setTime($time)
-        {
-            $this->time = $time;
+            $this->takenAt = $value;
 
             return $this;
         }
@@ -132,11 +109,22 @@ class Capteurs
         /**
          * Set the value of room
          * @return  self
-         */ 
+         */
         public function setRoom($room)
         {
             $this->room = $room;
 
             return $this;
+        }
+
+        public function jsonSerialize(): mixed
+        {
+            return [
+                'id' => $this->id,
+                'takenAt' => $this->takenAt,
+                'type' => $this->type,
+                'value' => $this->value,
+                'room' => $this->room->getId()
+            ];
         }
 }

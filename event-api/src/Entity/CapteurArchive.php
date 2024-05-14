@@ -1,12 +1,12 @@
 <?php
-// src/Entity/CapteurArchiveEntity.php
+// src/Entity/CapteurArchive.php
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: "Capteur_Archive")]
-class Capteur_Archive
+class CapteurArchive implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\Column(type: "integer")]
@@ -23,7 +23,7 @@ class Capteur_Archive
     private $minValue;
 
     #[ORM\JoinColumn(name: "reservation_id", referencedColumnName: "id")]
-    #[ORM\ManyToOne(targetEntity: "Reservation")]
+    #[ORM\ManyToOne(targetEntity: "Reservation", inversedBy: "capteurArchive")]
     private $reservation;
 
     // getters and setters
@@ -105,7 +105,18 @@ class Capteur_Archive
      * @param Reservation|null $reservation
      */
     public function setReservation(?Reservation $reservation): void
+        {
+            $this->reservation = $reservation;
+    }
+
+    public function jsonSerialize(): mixed
     {
-        $this->reservation = $reservation;
+        return [
+            'id' => $this->id,
+            'meanValue' => $this->meanValue,
+            'maxValue' => $this->maxValue,
+            'minValue' => $this->minValue,
+            'reservation' => $this->reservation->getId(),
+        ];
     }
 }

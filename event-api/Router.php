@@ -40,6 +40,7 @@ class Router
         foreach ($this->routes as $route) {
             if (!empty($route['params'])) {
                 foreach ($route['params'] as $param) {
+                    if(!is_array($param)) continue; // Handle the 403 without getting an error on the foreach
                     foreach ($param as $content) {
                         if (preg_match("/" . $content . "/", $url, $matchesParams)) {
                             $entity = $matchesParams[0];
