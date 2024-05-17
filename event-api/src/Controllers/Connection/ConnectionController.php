@@ -119,16 +119,15 @@ class ConnectionController extends AbstractController
     }
 
     /**
-     * @OA/Get(
+     * @OA\Get(
      * path="/currentUser",
-     * @OA/Header(header="Authorization", description="Bearer token", @OA\Schema(type="string")),
+     * @OA\Header(header="Authorization", description="Bearer token", @OA\Schema(type="string")),
      * @OA\Response(
      * response="200",
-     * description="Get the current user",
-     * @OA\JsonContent(type="object", description="User object")
+     * description="Generate public and private keys for JWT authentication",
+     * @OA\JsonContent(type="string", description="User object")
      * )
      * )
-     * @throws ORMException
      */
     public function currentUser(){
         $headers = getallheaders();

@@ -17,7 +17,11 @@ class JSONResponse
 
     public function send(): void
     {
-
         echo $this->data;
+    }
+
+    public function addData(mixed $data): void
+    {
+        $this->data = $this->data + json_encode($data);
     }
 }
