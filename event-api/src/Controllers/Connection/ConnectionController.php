@@ -91,18 +91,6 @@ class ConnectionController extends AbstractController
      */
     public function login(array $params): void
     {
-    // If the request method is OPTIONS, set the headers and exit
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        header("Access-Control-Allow-Origin: http://localhost:9000");
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-        header("Access-Control-Allow-Headers: Content-Type");
-        exit;
-    }
-
-    // The rest of your method goes here
-    header("Access-Control-Allow-Origin: http://localhost:9000");
-    header("Access-Control-Allow-Methods: GET, POST");
-    header("Access-Control-Allow-Headers: Content-Type");
     $email = $params['email'];
     $password = $params['password'];
     $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
@@ -128,5 +116,27 @@ class ConnectionController extends AbstractController
             $response = new JSONResponse(['error' => 'Password not valid']);
             $response->send();
         }
+    }
+
+    /**
+     * @OA/Get(
+     * path="/currentUser",
+     * @OA/Header(header="Authorization", description="Bearer token", @OA\Schema(type="string")),
+     * @OA\Response(
+     * response="200",
+     * description="Get the current user",
+     * @OA\JsonContent(type="object", description="User object")
+     * )
+     * )
+     * @throws ORMException
+     */
+    public function currentUser(){
+        $headers = getallheaders();
+        $token = $headers['Authorization'];
+        $jwt = new JWT();
+        $id = $jwt->decode($token)['id'];
+        $user = $this->entityManager->getRepository(User::class)->find($id);
+        $response = new JSONResponse($user);
+        $response->send();
     }
 }

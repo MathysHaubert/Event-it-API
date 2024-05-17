@@ -149,3 +149,13 @@ paths:
       responses:
         '200':
           description: 'Create the entity'
+components:
+  schemas: {  }
+  responses:
+    '200':
+      description: 'Get the current user'
+      content:
+        application/json:
+          schema:
+            description: 'User object'
+            type: object
