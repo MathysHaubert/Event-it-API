@@ -2,6 +2,7 @@
 // src/Entity/User.php
 namespace App\Entity;
 
+use App\Tools\JWT;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
@@ -231,6 +232,23 @@ class User implements \JsonSerializable
     {
         $this->role = $role;
         return $this;
+    }
+
+    /**
+     * Get user jwt token
+     * @return string
+     */
+    public function getJWT(): string
+    {
+        $jwt = new JWT();
+        $jwt->addPayload([
+            'id' => $this->getId(),
+            'email' => $this->getEmail(),
+            'fullName' => $this->getFirstName() . " " . $this->getLastName(),
+            'role' => $this->getRole(),
+        ]);
+        $jwt->encode();
+        return $jwt->getJWT();
     }
 
     public function jsonSerialize(): mixed

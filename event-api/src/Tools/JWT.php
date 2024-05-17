@@ -6,7 +6,7 @@ namespace App\Tools;
 
 use OpenSSLAsymmetricKey;
 use Firebase\JWT\JWT as JWTBase;
-use App\Entity;
+use Dotenv\Dotenv;
 class JWT
 {
 
@@ -40,6 +40,16 @@ class JWT
     }
 
     public function getPrivateKey(): string {
+        $dotenv = Dotenv::createImmutable('/var/www/html');
+        $dotenv->load();
+
+        if (!isset($_ENV['PRIVATE_KEY'])) {
+            $this->generateKeys();
+            file_put_contents('/var/www/html/.env', 'PRIVATE_KEY="' . $this->privateKey . "\"\n", FILE_APPEND);
+        } else {
+            $this->privateKey = $_ENV['PRIVATE_KEY'];
+        }
+
         return $this->privateKey;
     }
 
@@ -53,6 +63,9 @@ class JWT
     }
 
     public function encode(): void {
+        if(!$this->privateKey) {
+            $this->getPrivateKey();
+        }
         $this->data =  JWTBase::encode($this->payload, $this->privateKey,'RS256');
     }
 
