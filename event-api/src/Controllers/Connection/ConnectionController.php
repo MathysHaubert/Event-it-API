@@ -112,7 +112,17 @@ class ConnectionController extends AbstractController
             return;
         }
         if ($password == $user->getPassword()) {
-            $response = new JSONResponse($user->jsonSerialize());
+            $response = new JSONResponse([
+                "id" => $user->getId(),
+                "email" => $user->getEmail(),
+                "firstName" => $user->getFirstName(),
+                "lastName" => $user->getLastName(),
+                "organization" => $user->getOrganization(),
+                "lastConnection" => $user->getLastConnection(),
+                "createdAt" => $user->getCreatedAt(),
+                "role" => $user->getRole(),
+                "token" => $user->getJWT()
+            ]);
             $response->send();
         } else {
             $response = new JSONResponse(['error' => 'Password not valid']);
