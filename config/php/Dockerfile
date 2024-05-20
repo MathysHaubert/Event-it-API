@@ -10,8 +10,6 @@ RUN apt-get update && apt-get upgrade -y && \
     echo "extension=yaml.so" >> /usr/local/etc/php/php.ini && \
     a2enmod rewrite
 
-RUN chmod o+w .env
-
 CMD ["apache2ctl", "-D", "FOREGROUND"]
 
 EXPOSE 80
