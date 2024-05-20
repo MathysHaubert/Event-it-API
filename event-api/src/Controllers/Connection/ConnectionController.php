@@ -117,26 +117,4 @@ class ConnectionController extends AbstractController
             $response->send();
         }
     }
-
-    /**
-     * @OA/Get(
-     * path="/currentUser",
-     * @OA/Header(header="Authorization", description="Bearer token", @OA\Schema(type="string")),
-     * @OA\Response(
-     * response="200",
-     * description="Get the current user",
-     * @OA\JsonContent(type="object", description="User object")
-     * )
-     * )
-     * @throws ORMException
-     */
-    public function currentUser(){
-        $headers = getallheaders();
-        $token = $headers['Authorization'];
-        $jwt = new JWT();
-        $id = $jwt->decode($token)['id'];
-        $user = $this->entityManager->getRepository(User::class)->find($id);
-        $response = new JSONResponse($user);
-        $response->send();
-    }
 }

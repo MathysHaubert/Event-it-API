@@ -15,6 +15,7 @@ use App\Entity\Room;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\Exception\ORMException;
 use OpenApi\Annotations as OA;
+use App\Tools\JWT;
 
 class EntityManagerController extends AbstractController
 {
@@ -44,7 +45,7 @@ class EntityManagerController extends AbstractController
      *         description="Entity name",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"user", "capteur", "CapteurArchive", "forum", "ForumMessage", "organization", "reservation", "room", "status"}
+     *             enum={"user", "capteur", "CapteurArchive", "forum", "ForumMessage", "organization", "reservation", "room", "status", "currentUser"}
      *         )
      *     ),
      *     @OA\Response(
@@ -62,6 +63,15 @@ class EntityManagerController extends AbstractController
             case("user"):
                 $repo = $this->entityManager->getRepository(User::class);
                 $dataResponse = $repo->findBy($params);
+                break;
+            case("currentUser"):
+                $headers = getallheaders();
+                $token = $headers['Authorization'];
+                $jwt = new JWT();
+                $id = $jwt->decode($token)['id'];
+                $user = $this->entityManager->getRepository(User::class)->find($id);
+                $response = new JSONResponse($user);
+                $response->send();
                 break;
             case("capteur"):
                 $repo = $this->entityManager->getRepository(Capteur::class);

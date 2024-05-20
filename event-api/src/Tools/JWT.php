@@ -6,6 +6,7 @@ namespace App\Tools;
 
 use OpenSSLAsymmetricKey;
 use Firebase\JWT\JWT as JWTBase;
+use Firebase\JWT\Key;
 use Dotenv\Dotenv;
 class JWT
 {
@@ -17,6 +18,10 @@ class JWT
 
     private string $data;
     private array $payload = [];
+
+    public function __construct(){
+        $this->token = new \stdClass();
+    }
 
     /**
      * @throws \Exception
@@ -36,6 +41,17 @@ class JWT
     }
 
     public function getPublicKey(): string {
+        $dotenv = Dotenv::createImmutable('/var/www/html');
+        $dotenv->load();
+
+        if(!isset($_ENV['PUBLIC_KEY'])) {
+            $this->generateKeys();
+            file_put_contents('/var/www/html/.env', 'PUBLIC_KEY="' . $this->publicKey . "\"\n", FILE_APPEND);
+            file_put_contents('/var/www/html/.env', 'PRIVATE_KEY="' . $this->privateKey . "\"\n", FILE_APPEND);
+        } else {
+            $this->publicKey = $_ENV['PUBLIC_KEY'];
+        }
+
         return $this->publicKey;
     }
 
@@ -46,6 +62,7 @@ class JWT
         if (!isset($_ENV['PRIVATE_KEY'])) {
             $this->generateKeys();
             file_put_contents('/var/www/html/.env', 'PRIVATE_KEY="' . $this->privateKey . "\"\n", FILE_APPEND);
+            file_put_contents('/var/www/html/.env', 'PUBLIC_KEY="' . $this->publicKey . "\"\n", FILE_APPEND);
         } else {
             $this->privateKey = $_ENV['PRIVATE_KEY'];
         }
@@ -53,9 +70,15 @@ class JWT
         return $this->privateKey;
     }
 
-    public function decode(
-    ){
-        $this->token = JWTBase::decode($this->token, ["0" => $this->privateKey]);
+    public function decode($jwt)
+    {
+        $key = $this->getPublicKey();
+        if(substr($jwt, 0, 7) === 'Bearer '){
+            $jwt = substr($jwt, 7);
+        }
+        $decoded = JWTBase::decode($jwt, new Key($key, 'RS256'));
+
+        return (array)$decoded;
     }
 
     public function addPayload(array $newPayload): void {
