@@ -107,7 +107,7 @@ class ConnectionController extends AbstractController
     /**
      * @OA/Get(
      * path="/currentUser",
-     * @OA/Header(header="Authorization", description="Bearer token", @OA\Schema(type="string")),
+     * @OA/Header(header="Authorization", description="Bearer token"),
      * @OA\Response(
      * response="200",
      * description="Get the current user",
