@@ -59,21 +59,47 @@ class ConnectionController extends AbstractController
     /**
      * @OA\Post(
      *     path="/login",
-     *     @OA\Parameter(
-     *         name="login",
-     *         in="body",
+     *     operationId="loginUser",
+     *     tags={"Login"},
+     *     summary="Log in a user",
+     *     @OA\RequestBody(
      *         required=true,
-     *         description="Login path",
-     *         @OA\Schema(
-     *             type="string",
+     *         description="User credentials",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 required={"username", "password"},
+     *                 @OA\Property(
+     *                     property="username",
+     *                     type="string",
+     *                     example="user@example.com"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="password",
+     *                     type="string",
+     *                     example="yourpassword"
+     *                 )
+     *             )
      *         )
      *     ),
      *     @OA\Response(
-     *         response="200",
-     *         description="Return the user",
+     *         response=200,
+     *         description="Successful login",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="token",
+     *                 type="string",
+     *                 description="Authentication token"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid credentials"
      *     )
      * )
-     * @throws ORMException
      */
     public function login(array $params): void
     {
