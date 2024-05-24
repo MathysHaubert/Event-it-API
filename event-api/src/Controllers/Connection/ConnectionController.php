@@ -3,6 +3,7 @@
 namespace App\Controllers\Connection;
 
 use App\Controllers\AbstractController;
+use Doctrine\ORM\Exception\ORMException;
 use OpenApi\Annotations as OA;
 use App\Tools\JSONResponse;
 use App\Tools\JWT;
@@ -57,35 +58,20 @@ class ConnectionController extends AbstractController
 
     /**
      * @OA\Post(
-     * path="/login",
-     * @OA\RequestBody(
-     * @OA\JsonContent(
-     * type="object",
-     * @OA\Property(property="email", type="string"),
-     * @OA\Property(property="password", type="string"),
-     * )
-     * ),
-     * @OA\Response(
-     * response="200",
-     * description="Login to the API",
-     * headers={
-     *     @OA\Header(header="Access-Control-Allow-Origin", description="CORS header", @OA\Schema(type="string")),
-     *     @OA\Header(header="Access-Control-Allow-Methods", description="CORS header", @OA\Schema(type="string")),
-     *     @OA\Header(header="Access-Control-Allow-Headers", description="CORS header", @OA\Schema(type="string"))
-     * }
-     * )
-     * )
-     * @OA\Options(
-     * path="/login",
-     * @OA\Response(
-     * response="200",
-     * description="Preflight response",
-     * headers={
-     *     @OA\Header(header="Access-Control-Allow-Origin", description="CORS header", @OA\Schema(type="string")),
-     *     @OA\Header(header="Access-Control-Allow-Methods", description="CORS header", @OA\Schema(type="string")),
-     *     @OA\Header(header="Access-Control-Allow-Headers", description="CORS header", @OA\Schema(type="string"))
-     * }
-     * )
+     *     path="/login}",
+     *     @OA\Parameter(
+     *         name="login",
+     *         in="path",
+     *         required=true,
+     *         description="Login path",
+     *         @OA\Schema(
+     *             type="string",
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Return the user",
+     *     )
      * )
      * @throws ORMException
      */
