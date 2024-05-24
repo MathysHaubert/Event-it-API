@@ -61,7 +61,7 @@ class ConnectionController extends AbstractController
      *     path="/login",
      *     @OA\Parameter(
      *         name="login",
-     *         in="path",
+     *         in="body",
      *         required=true,
      *         description="Login path",
      *         @OA\Schema(
