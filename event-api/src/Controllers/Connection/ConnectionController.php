@@ -58,7 +58,7 @@ class ConnectionController extends AbstractController
 
     /**
      * @OA\Post(
-     *     path="/login}",
+     *     path="/login",
      *     @OA\Parameter(
      *         name="login",
      *         in="path",
