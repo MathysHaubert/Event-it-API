@@ -55,8 +55,11 @@ class JWT
         return $this->publicKey;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getPrivateKey(): string {
-        $dotenv = Dotenv::createImmutable('/var/www/html');
+        $dotenv = Dotenv::createImmutable("/var/www/html/");
         $dotenv->load();
 
         if (!isset($_ENV['PRIVATE_KEY'])) {

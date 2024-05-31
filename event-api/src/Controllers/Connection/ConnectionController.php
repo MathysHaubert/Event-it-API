@@ -3,6 +3,7 @@
 namespace App\Controllers\Connection;
 
 use App\Controllers\AbstractController;
+use Doctrine\ORM\Exception\ORMException;
 use OpenApi\Annotations as OA;
 use App\Tools\JSONResponse;
 use App\Tools\JWT;
@@ -57,37 +58,48 @@ class ConnectionController extends AbstractController
 
     /**
      * @OA\Post(
-     * path="/login",
-     * @OA\RequestBody(
-     * @OA\JsonContent(
-     * type="object",
-     * @OA\Property(property="email", type="string"),
-     * @OA\Property(property="password", type="string"),
+     *     path="/login",
+     *     operationId="loginUser",
+     *     tags={"Login"},
+     *     summary="Log in a user",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User credentials",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 required={"username", "password"},
+     *                 @OA\Property(
+     *                     property="username",
+     *                     type="string",
+     *                     example="user@example.com"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="password",
+     *                     type="string",
+     *                     example="yourpassword"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful login",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="token",
+     *                 type="string",
+     *                 description="Authentication token"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid credentials"
+     *     )
      * )
-     * ),
-     * @OA\Response(
-     * response="200",
-     * description="Login to the API",
-     * headers={
-     *     @OA\Header(header="Access-Control-Allow-Origin", description="CORS header", @OA\Schema(type="string")),
-     *     @OA\Header(header="Access-Control-Allow-Methods", description="CORS header", @OA\Schema(type="string")),
-     *     @OA\Header(header="Access-Control-Allow-Headers", description="CORS header", @OA\Schema(type="string"))
-     * }
-     * )
-     * )
-     * @OA\Options(
-     * path="/login",
-     * @OA\Response(
-     * response="200",
-     * description="Preflight response",
-     * headers={
-     *     @OA\Header(header="Access-Control-Allow-Origin", description="CORS header", @OA\Schema(type="string")),
-     *     @OA\Header(header="Access-Control-Allow-Methods", description="CORS header", @OA\Schema(type="string")),
-     *     @OA\Header(header="Access-Control-Allow-Headers", description="CORS header", @OA\Schema(type="string"))
-     * }
-     * )
-     * )
-     * @throws ORMException
      */
     public function login(array $params): void
     {
@@ -116,5 +128,27 @@ class ConnectionController extends AbstractController
             $response = new JSONResponse(['error' => 'Password not valid']);
             $response->send();
         }
+    }
+
+    /**
+     * @OA/Get(
+     * path="/currentUser",
+     * @OA/Header(header="Authorization", description="Bearer token"),
+     * @OA\Response(
+     * response="200",
+     * description="Get the current user",
+     * @OA\JsonContent(type="object", description="User object")
+     * )
+     * )
+     * @throws ORMException
+     */
+    public function currentUser(){
+        $headers = getallheaders();
+        $token = $headers['Authorization'];
+        $jwt = new JWT();
+        $id = $jwt->decode($token)['id'];
+        $user = $this->entityManager->getRepository(User::class)->find($id);
+        $response = new JSONResponse($user);
+        $response->send();
     }
 }
