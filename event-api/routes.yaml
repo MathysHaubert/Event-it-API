@@ -50,6 +50,26 @@ event-api.create-entity:
         faq,
       ]
 
+event-api.create-entity:
+  path: /{entity}
+  request_methods: [DELETE]
+  controller: App\Controllers\EntityManagerController\EntityManagerController
+  method: createEntity
+  params:
+    entity:
+      [
+        user,
+        capteur,
+        CapteurArchive,
+        forum,
+        ForumMessage,
+        organization,
+        reservation,
+        room,
+        currentUser,
+        faq,
+      ]
+
 event-api.update-entity:
   path: /{entity}
   request_methods: [PATCH]
