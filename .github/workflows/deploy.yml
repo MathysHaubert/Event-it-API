@@ -29,6 +29,12 @@ jobs:
             docker-compose up -d
             sleep 30 # wait for containers to start
 
+            # Ensure the .env file exists
+            if [ ! -f /var/www/html/.env ]; then
+              echo "Creating .env file"
+              touch /var/www/html/.env
+            fi
+
             # Ensure proper permissions
             sudo chown www-data:www-data /var/www/html/.env
             sudo chmod 644 /var/www/html/.env
