@@ -8,6 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: "Faq")]
 class Faq implements \JsonSerializable
 {
+    #[ORM\Id]
+    #[ORM\Column(type: "integer")]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
+    private $id;
+
     #[ORM\Column(type: "string", name: "question")]
     private $question;
 
@@ -49,6 +54,24 @@ class Faq implements \JsonSerializable
     public function setAnswer(string $answer): void
     {
         $this->answer = $answer;
+    }
+
+    /**
+     * Set the value of id
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Get the value of id
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
     public function jsonSerialize(): mixed
