@@ -100,6 +100,7 @@ paths:
               - reservation
               - room
               - status
+              - currentUser
       responses:
         '200':
           description: 'Request an entity to the API'
@@ -149,13 +150,3 @@ paths:
       responses:
         '200':
           description: 'Create the entity'
-components:
-  schemas: {  }
-  responses:
-    '200':
-      description: 'Get the current user'
-      content:
-        application/json:
-          schema:
-            description: 'User object'
-            type: object
