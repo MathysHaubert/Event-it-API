@@ -427,4 +427,36 @@ class EntityManagerController extends AbstractController
     {
         return str_replace("/", "", $_SERVER['REQUEST_URI']);
     }
+            /**
+     * @OA\Delete(
+     *     path="/{entity}",
+     *     @OA\Parameter(
+     *         name="entity",
+     *         in="path",
+     *         required=true,
+     *         description="Entity name",
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"user", "capteur", "CapteurArchive", "forum", "ForumMessage", "organization", "reservation", "room", "status","faq"}
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response="200",
+     *         description="Delete the entity",
+     *     )
+     * )
+     * @throws ORMException
+     */
+    public function deleteEntity(array $data = []) {
+        $errorAttr = "";
+        $errorNameEntity = "";
+        $dataResponse = "Someting get wrong";
+        $entity = $this->extractEntity();
+        switch($entity){
+            case 'faq':
+                $entity = array_pop($this->entityManager->getRepository(Faq::class)->findBy(["question" => $data['question'],"answer" => $data['answer']]));
+                $this->entityManager->remove($entity);
+                break;
+        }
+    }
 }
