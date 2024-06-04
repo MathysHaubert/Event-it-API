@@ -303,20 +303,20 @@ class EntityManagerController extends AbstractController
                     $repo = $this->entityManager->getRepository(User::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {
-                        if($name === "id"){     //not a big fan of this will have to make it work via the url
+                        if($name === "id") { // not a big fan of this will have to make it work via the url
                             continue;
                         }
                         $setter = 'set' . ucfirst($name);
-                        if ($name === "organization" && is_array($value)) {
-                            $orgRepo = $this->entityManager->getRepository(Organization::class);
-                            if ($name === "organization" && is_array($value)) {
+                        if ($name === "organization") {
+                            if (is_array($value) && isset($value['id'])) {
                                 $orgRepo = $this->entityManager->getRepository(Organization::class);
-                                $organization = null;
-                                if (isset($value[0]['id'])) {
-                                    $organization = $orgRepo->find($value[0]['id']);
+                                $organization = $orgRepo->find($value['id']);
+                                if ($organization) {
+                                    $entity->$setter($organization);
                                 }
-                                $value = $organization;
                             }
+                            // Skip setting organization if no valid ID is provided
+                            continue;
                         }
                         $entity->$setter($value);
                     }
