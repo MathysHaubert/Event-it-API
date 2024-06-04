@@ -1,13 +1,5 @@
 name: Deploy to server
 
-# todo : ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
-# todo : ssh-copy-id -i /path/to/your/public/key.pub username@server
-# Add the private key (the one without the .pub extension) as a secret in your GitHub repository.
-# You can do this in the repository settings under "Secrets". Let's call this secret SSH_PRIVATE_KEY.
-
-#  Add the SERVER_HOST and SERVER_USERNAME secrets to your GitHub repository. (settings -> secrets -> new repository secret)
-#  These should be the IP address or hostname of your server, and your username on the server, respectively.
-
 on:
   push:
     branches:
@@ -29,8 +21,6 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # NOT SURE IF THIS WORKS
-            chmod +x -R /home/pi/Event-it-API
             cd /home/pi/Event-it-API
             git reset --hard
             git pull
@@ -38,22 +28,24 @@ jobs:
             docker-compose build
             docker-compose up -d
             sleep 30 # wait for containers to start
-            docker-compose exec -t backend composer install
-            docker-compose exec -t db bash -c "
+
+            # Ensure proper permissions
+            sudo chown www-data:www-data /var/www/html/.env
+            sudo chmod 644 /var/www/html/.env
+
+            docker-compose exec -T backend composer install
+            docker-compose exec -T db bash -c "
               wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh -O /wait-for-it.sh && \
               chmod +x /wait-for-it.sh && \
               /wait-for-it.sh localhost:3307 -t 60
             "
-            DB_EXISTS=$(docker-compose exec -t db mysql -u event-it -ppassword-for-event-it -e "SHOW DATABASES LIKE 'event-API';" | grep "event-API")
+            DB_EXISTS=$(docker-compose exec -T db mysql -u event-it -ppassword-for-event-it -e "SHOW DATABASES LIKE 'event-API';" | grep "event-API")
             if [ -z "$DB_EXISTS" ]; then
               echo "Database does not exist, creating..."
               docker-compose exec -T backend php src/bin/doctrine.php orm:schema-tool:create
               echo "Database created."
             fi
-            docker-compose exec -T backend bash -c "
-              touch /var/www/html/.env && \
-              chmod 777 /var/www/html/.env && \
-              chown www-data:www-data /var/www/html/.env && \
+
   update_collection:
     runs-on: ubuntu-latest
     steps:
