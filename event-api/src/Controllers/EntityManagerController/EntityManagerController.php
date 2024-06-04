@@ -452,13 +452,12 @@ class EntityManagerController extends AbstractController
         $errorNameEntity = "";
         $dataResponse = "Someting get wrong";
         $entity = $this->extractEntity();
-        echo print_r($params,true);
-        echo print_r($entity,true);
         switch($entity){
             case ('faq'):
                 $faqEntities = $this->entityManager->getRepository(Faq::class)->findOneBy(["question" => $params['question'],"answer" => $params['answer']]);
                 echo print_r($faqEntities);
                 $this->entityManager->remove($faqEntities);
+                $this->entityManager->flush();
                 break;
         }
     }
