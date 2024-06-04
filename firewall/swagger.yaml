@@ -116,6 +116,30 @@ paths:
       responses:
         '200':
           description: 'Create the entity'
+    delete:
+      operationId: cab69561441e075b2e97f83b64b273a9
+      parameters:
+        -
+          name: entity
+          in: path
+          description: 'Entity name'
+          required: true
+          schema:
+            type: string
+            enum:
+              - user
+              - capteur
+              - CapteurArchive
+              - forum
+              - ForumMessage
+              - organization
+              - reservation
+              - room
+              - status
+              - faq
+      responses:
+        '200':
+          description: 'Delete the entity'
     patch:
       operationId: 138550b22631dd6f66c1fcff825963e8
       parameters:
