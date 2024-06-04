@@ -12,6 +12,7 @@ use App\Entity\CapteurArchive;
 use App\Entity\Organization;
 use App\Entity\Reservation;
 use App\Entity\Room;
+use App\Entity\Faq;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\Exception\ORMException;
 use OpenApi\Annotations as OA;
@@ -45,7 +46,7 @@ class EntityManagerController extends AbstractController
      *         description="Entity name",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"user", "capteur", "CapteurArchive", "forum", "ForumMessage", "organization", "reservation", "room", "status", "currentUser"}
+     *             enum={"user", "capteur", "CapteurArchive", "forum", "ForumMessage", "organization", "reservation", "room", "status", "currentUser", "faq"}
      *         )
      *     ),
      *     @OA\Response(
@@ -62,6 +63,10 @@ class EntityManagerController extends AbstractController
         switch ($entity) {
             case("user"):
                 $repo = $this->entityManager->getRepository(User::class);
+                $dataResponse = $repo->findBy($params);
+                break;
+            case("faq"):
+                $repo = $this->entityManager->getRepository(Faq::class);
                 $dataResponse = $repo->findBy($params);
                 break;
             case("currentUser"):
@@ -119,7 +124,7 @@ class EntityManagerController extends AbstractController
      *         description="Entity name",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"user", "capteur", "CapteurArchive", "forum", "ForumMessage", "organization", "reservation", "room", "status"}
+     *             enum={"user", "capteur", "CapteurArchive", "forum", "ForumMessage", "organization", "reservation", "room", "status", "faq"}
      *         )
      *     ),
      *     @OA\Response(
@@ -155,6 +160,12 @@ class EntityManagerController extends AbstractController
                         $newEntity->$setter($value);
                     }
                     break;
+                case("faq"):
+                    $newEntity = new Faq();
+                    foreach ($params as $name => $value) {
+                        $setter = 'set' . ucfirst($name);
+                        $newEntity->$setter($value);
+                    }
                 case ("capteur"):
                     $newEntity = new Capteur();
                     $newEntity->setTakenAt(new \DateTime('now'));
@@ -272,7 +283,7 @@ class EntityManagerController extends AbstractController
      *         description="Entity name",
      *         @OA\Schema(
      *             type="string",
-     *             enum={"user", "capteur", "CapteurArchive", "forum", "ForumMessage", "organization", "reservation", "room", "status"}
+     *             enum={"user", "capteur", "CapteurArchive", "forum", "ForumMessage", "organization", "reservation", "room", "status", "faq"}
      *         )
      *     ),
      *     @OA\Response(
@@ -298,16 +309,14 @@ class EntityManagerController extends AbstractController
                         $setter = 'set' . ucfirst($name);
                         if ($name === "organization" && is_array($value)) {
                             $orgRepo = $this->entityManager->getRepository(Organization::class);
-                            $organizations = [];
-                            foreach ($value as $orgData) {
-                                if (isset($orgData['id'])) {
-                                    $org = $orgRepo->find($orgData['id']);
-                                    if ($org !== null) {
-                                        $organizations[] = $org;
-                                    }
+                            if ($name === "organization" && is_array($value)) {
+                                $orgRepo = $this->entityManager->getRepository(Organization::class);
+                                $organization = null;
+                                if (isset($value[0]['id'])) {
+                                    $organization = $orgRepo->find($value[0]['id']);
                                 }
+                                $value = $organization;
                             }
-                            $value = $organizations;
                         }
                         $entity->$setter($value);
                     }
@@ -380,6 +389,17 @@ class EntityManagerController extends AbstractController
                     break;
                 case ("room"):
                     $repo = $this->entityManager->getRepository(Room::class);
+                    $entity = $repo->find($params['id']);
+                    foreach ($params as $name => $value) {
+                        if($name === "id"){     //not a big fan of this will have to make it work via the url
+                            continue;
+                        }
+                        $setter = 'set' . ucfirst($name);
+                        $entity->$setter($value);
+                    }
+                    break;
+                case ("faq"):
+                    $repo = $this->entityManager->getRepository(Faq::class);
                     $entity = $repo->find($params['id']);
                     foreach ($params as $name => $value) {
                         if($name === "id"){     //not a big fan of this will have to make it work via the url

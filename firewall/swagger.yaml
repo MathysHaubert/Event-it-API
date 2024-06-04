@@ -34,51 +34,38 @@ paths:
                 type: string
   /login:
     post:
-      operationId: 395dbc7a2086577e6e0658161be85ce6
+      tags:
+        - Login
+      summary: 'Log in a user'
+      operationId: loginUser
       requestBody:
+        description: 'User credentials'
+        required: true
         content:
           application/json:
             schema:
+              required:
+                - username
+                - password
               properties:
-                email:
+                username:
                   type: string
+                  example: user@example.com
                 password:
                   type: string
+                  example: yourpassword
               type: object
       responses:
         '200':
-          description: 'Login to the API'
-          headers:
-            Access-Control-Allow-Origin:
-              description: 'CORS header'
+          description: 'Successful login'
+          content:
+            application/json:
               schema:
-                type: string
-            Access-Control-Allow-Methods:
-              description: 'CORS header'
-              schema:
-                type: string
-            Access-Control-Allow-Headers:
-              description: 'CORS header'
-              schema:
-                type: string
-    options:
-      operationId: c23e7d7bf7816ee6c0e1232b1b422689
-      responses:
-        '200':
-          description: 'Preflight response'
-          headers:
-            Access-Control-Allow-Origin:
-              description: 'CORS header'
-              schema:
-                type: string
-            Access-Control-Allow-Methods:
-              description: 'CORS header'
-              schema:
-                type: string
-            Access-Control-Allow-Headers:
-              description: 'CORS header'
-              schema:
-                type: string
+                properties:
+                  token: { description: 'Authentication token', type: string }
+                type: object
+        '400':
+          description: 'Invalid credentials'
   '/{entity}':
     get:
       operationId: 3bef539a9a6bfbc257e47b3b9189fa97
@@ -101,6 +88,7 @@ paths:
               - room
               - status
               - currentUser
+              - faq
       responses:
         '200':
           description: 'Request an entity to the API'
@@ -124,6 +112,7 @@ paths:
               - reservation
               - room
               - status
+              - faq
       responses:
         '200':
           description: 'Create the entity'
@@ -147,6 +136,16 @@ paths:
               - reservation
               - room
               - status
+              - faq
       responses:
         '200':
           description: 'Create the entity'
+components:
+  responses:
+    '200':
+      description: 'Get the current user'
+      content:
+        application/json:
+          schema:
+            description: 'User object'
+            type: object
