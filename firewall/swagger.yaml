@@ -45,10 +45,10 @@ paths:
           application/json:
             schema:
               required:
-                - username
+                - email
                 - password
               properties:
-                username:
+                email:
                   type: string
                   example: user@example.com
                 password:

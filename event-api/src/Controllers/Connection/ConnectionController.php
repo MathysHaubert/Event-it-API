@@ -69,9 +69,9 @@ class ConnectionController extends AbstractController
      *             mediaType="application/json",
      *             @OA\Schema(
      *                 type="object",
-     *                 required={"username", "password"},
+     *                 required={"email", "password"},
      *                 @OA\Property(
-     *                     property="username",
+     *                     property="email",
      *                     type="string",
      *                     example="user@example.com"
      *                 ),
