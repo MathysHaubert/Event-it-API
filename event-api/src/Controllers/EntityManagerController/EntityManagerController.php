@@ -166,6 +166,7 @@ class EntityManagerController extends AbstractController
                         $setter = 'set' . ucfirst($name);
                         $newEntity->$setter($value);
                     }
+                    break;
                 case ("capteur"):
                     $newEntity = new Capteur();
                     $newEntity->setTakenAt(new \DateTime('now'));
