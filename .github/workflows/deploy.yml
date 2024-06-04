@@ -50,7 +50,10 @@ jobs:
               docker-compose exec -T backend php src/bin/doctrine.php orm:schema-tool:create
               echo "Database created."
             fi
-            docker-compose exec -T backend chmod 664 /var/www/html/.env && chown www-data:www-data /var/www/html/.env
+            docker-compose exec -T backend bash -c "
+              touch /var/www/html/.env && \
+              chmod 777 /var/www/html/.env && \
+              chown www-data:www-data /var/www/html/.env && \
   update_collection:
     runs-on: ubuntu-latest
     steps:
