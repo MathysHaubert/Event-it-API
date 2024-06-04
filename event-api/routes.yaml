@@ -27,6 +27,7 @@ event-api.get-entity:
         reservation,
         room,
         currentUser,
+        faq,
       ]
 
 event-api.create-entity:
@@ -46,6 +47,7 @@ event-api.create-entity:
         reservation,
         room,
         currentUser,
+        faq,
       ]
 
 event-api.update-entity:
@@ -65,6 +67,7 @@ event-api.update-entity:
         reservation,
         room,
         currentUser,
+        faq,
       ]
 
 event-api.login:
