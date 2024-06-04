@@ -286,6 +286,10 @@ class EntityManagerController extends AbstractController
                             continue;
                         }
                         $setter = 'set' . ucfirst($name);
+                        if ($name === "organization" && is_array($value)) {
+                            $orgRepo = $this->entityManager->getRepository(Organization::class);
+                            $value = $orgRepo->find($value['id']);
+                        }
                         $entity->$setter($value);
                     }
                     break;
