@@ -447,15 +447,19 @@ class EntityManagerController extends AbstractController
      * )
      * @throws ORMException
      */
-    public function deleteEntity(array $data = []) {
+    public function deleteEntity(array $params) {
+        echo 'teste';
         $errorAttr = "";
         $errorNameEntity = "";
         $dataResponse = "Someting get wrong";
         $entity = $this->extractEntity();
+        echo print_r($params,true);
+        echo print_r($entity,true);
         switch($entity){
-            case 'faq':
-                $entity = array_pop($this->entityManager->getRepository(Faq::class)->findBy(["question" => $data['question'],"answer" => $data['answer']]));
-                $this->entityManager->remove($entity);
+            case ('faq'):
+                $faqEntities = $this->entityManager->getRepository(Faq::class)->findBy(["question" => $params['question'],"answer" => $params['answer']]);
+                $entityToDelete = array_pop($faqEntities);
+                $this->entityManager->remove($entityToDelete);
                 break;
         }
     }
