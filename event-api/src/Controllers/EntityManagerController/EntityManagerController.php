@@ -258,6 +258,7 @@ class EntityManagerController extends AbstractController
                 case ("room"):
                     $newEntity = new Room();
                     $newEntity->setLocation($params['location']);
+                    $newEntity->setIntegratedAt(new \DateTime('now'));
                     break;
             }
             $this->entityManager->persist($newEntity);
