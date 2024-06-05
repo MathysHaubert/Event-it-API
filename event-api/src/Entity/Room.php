@@ -155,6 +155,7 @@ class Room implements \JsonSerializable
         return [
             'id' => $this->id,
             'location' => $this->location,
+            'integrated_at' => $this->integrated_at,
             'reservations' => $reservations,
             'capteurs' => $capteurs,
         ];
